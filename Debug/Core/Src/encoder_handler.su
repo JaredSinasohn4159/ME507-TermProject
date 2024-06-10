@@ -1,0 +1,3 @@
+../Core/Src/encoder_handler.c:9:6:encoder_read_curr_state	32	static
+../Core/Src/encoder_handler.c:28:9:encoder_calc_speed	16	static
+../Core/Src/encoder_handler.c:31:6:zero	16	static

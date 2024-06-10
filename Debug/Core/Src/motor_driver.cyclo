@@ -1,0 +1,2 @@
+../Core/Src/motor_driver.c:13:6:motor_set_duty_cycle	9
+../Core/Src/motor_driver.c:81:6:motor_enable_disable	7
