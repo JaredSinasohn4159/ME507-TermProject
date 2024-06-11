@@ -54,6 +54,7 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
+TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim8;
 
 UART_HandleTypeDef huart2;
@@ -87,6 +88,7 @@ static Motor m = { .timer = &htim1,
 	int32_t speed;
 	*/
 static Encoder pitch = {.timer = &htim5,
+						.timing_timer = &htim6,
 						.prev_count = 0,
 						.curr_count = 0,
 						.prev_time = 0,
@@ -95,12 +97,47 @@ static Encoder pitch = {.timer = &htim5,
 						.speed = 0
 };
 static Encoder mot_enc = {.timer = &htim4,
+						.timing_timer = &htim6,
 						.prev_count = 0,
 						.curr_count = 0,
 						.prev_time = 0,
 						.curr_time = 1,
 						.pos = 0,
 						.speed = 0
+};
+/*
+   typedef struct{
+	float kp;
+	float ki;
+	float kd;
+	int32_t setpoint;
+	int32_t eff;
+	int32_t curr;
+	int32_t err;
+	int32_t err_acc;
+	uint8_t prev_err_index;
+	uint32_t initial_time;
+	uint32_t curr_time;
+	int32_t slope;
+	uint32_t prev_err_list_length;
+	int32_t prev_err_list[];
+}CLController;
+ */
+static CLController m_con = {
+		.kp = 1,
+		.ki = 10,
+		.kd = 0,
+		.setpoint = 2475,
+		.eff = 0,
+		.curr = 0,
+		.err = 0,
+		.err_acc = 0,
+		.prev_err_index = 0,
+		.initial_time = 0,
+		.curr_time = 1,
+		.slope = 0,
+		.prev_err_list_length = 10,
+		.prev_err_list = {0,0,0,0,0,0,0,0,0,0}
 };
 static PitchEncoder pe = {.pitch = 0,
 						  .encoder = &pitch,
@@ -115,6 +152,8 @@ uint8_t Space[] = " - ";
 uint8_t StartMSG[] = "Starting I2C Scanning: \r\n";
 uint8_t Pitch_Message[] = "Current Pitch: ";
 uint8_t EndMSG[] = "Done! \r\n\r\n";
+static int32_t motor_speeds[12] = {2475,2623,2778,2943,3119,3304,3500,3708,3929,4163,4410,4672};
+static uint32_t ptch;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -128,6 +167,7 @@ static void MX_I2C2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM5_Init(void);
 static void MX_TIM8_Init(void);
+static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 void display_task(uint8_t* state);
 /* USER CODE END PFP */
@@ -140,8 +180,22 @@ void display_task(uint8_t* state){
 		*state = 1;
 		break;
 	case 1:
-		display_note(&display,get_pitch(&pe));
+		ptch = get_pitch(&pe);
+		display_note(&display,ptch);
 		break;
+	}
+}
+void motor_task (uint8_t* state){
+	switch(*state){
+		case 0:
+			state = 1;
+			break;
+		case 1:
+			m_con.setpoint = motor_speeds[ptch];
+			encoder_read_curr_state(&mot_enc);
+			run(&m_con,mot_enc.speed);
+			break;
+
 	}
 }
 /* USER CODE END 0 */
@@ -183,6 +237,7 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_TIM8_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   HAL_Init();
   SystemClock_Config();
@@ -190,13 +245,21 @@ int main(void)
   MX_I2C2_Init();
   MX_USART2_UART_Init();
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
-  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_1);
+  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_2);
   //! allow for receiving of interrupts through uart
   HAL_UART_Receive_IT(&huart2, (uint8_t*)&char_in, 1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  htim1.Instance->CCR1 = 1000;
+  htim1.Instance->CCR2 = 0;
+  HAL_TIM_Base_Start(&htim6);
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10,GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2,GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2,GPIO_PIN_SET);
+  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x14, 1, (uint8_t*)0b01010101, 1, 250);
+  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x15, 1, (uint8_t*)0b01010101, 1, 250);
+  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x16, 1, (uint8_t*)0b01010101, 1, 250);
+  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x17, 1, (uint8_t*)0b01010101, 1, 250);
   uint8_t i = 0, ret;
   HAL_UART_Transmit(&huart2, StartMSG, sizeof(StartMSG), 10000);
         for(i=1; i<128; i++)
@@ -213,7 +276,10 @@ int main(void)
             }
         }
         HAL_UART_Transmit(&huart2, EndMSG, sizeof(EndMSG), 10000);
-        uint32_t time = HAL_GetTick();
+        uint32_t time1 = HAL_GetTick();
+        uint32_t time2 = HAL_GetTick();
+        int32_t sped = 0;
+        HAL_I2C_Master_Transmit((&hi2c2), 0b11000001, ((uint8_t*)0b1101100001111000),2,100);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -223,13 +289,22 @@ int main(void)
   {
 
 	char_in = 'r';
-	encoder_read_curr_state(&mot_enc);
+	if(HAL_GetTick()>time1+50){
+		//encoder_read_curr_state(&mot_enc);
+		sped = mot_enc.speed;
+		//sprintf(Buffer, "Curr speed: %d  \r\n",(int)(mot_enc.speed));
+		//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+		time1 = HAL_GetTick();
+	}
 	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10,GPIO_PIN_SET);
-	/*uint8_t abcd = (pe.pitch);
-	encoder_read_curr_state(&mot_enc);
-	//sprintf(Buffer, "%d  \r\n",(int)(mot_enc.speed));
-	//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-	switch(get_pitch(&pe)){
+	uint8_t abcd = get_pitch(&pe);
+	//encoder_read_curr_state(&mot_enc);
+	if(HAL_GetTick()>time2+250){
+		sprintf(Buffer, "Current index: %d  \r\n",(pe.encoder->timer->Instance->CNT));
+		//sprintf(Buffer, "Current index: %d  \r\n",(abcd));
+		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+	}
+	switch(abcd){
 		case 0:
 			sprintf(Buffer, "A  \r\n");
 			break;
@@ -266,20 +341,20 @@ int main(void)
 		case 11:
 					sprintf(Buffer, "Ab \r\n");
 					break;
-	}*/
+	}
 	//motor_set_duty_cycle(&m,100);
 	//display_task(&t1state);
-	if(HAL_GetTick()>time+500){
+	if(HAL_GetTick()>time2+250){
 
-		sprintf(Buffer, "Curr time: %d  \r\n",(int)(mot_enc.curr_time));
+		/*sprintf(Buffer, "Curr time: %d  \r\n",(int)(mot_enc.curr_time));
 		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
 		sprintf(Buffer, "Curr count: %d  \r\n",(int)(mot_enc.curr_count));
 		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
 		sprintf(Buffer, "Prev count: %d  \r\n",(int)(mot_enc.prev_count));
-		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-		sprintf(Buffer, "Curr speed: %d  \r\n",(int)(mot_enc.speed));
-		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-		time = HAL_GetTick();
+		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);*/
+		//sprintf(Buffer, "Curr speed: %d  \r\n",(int)(mot_enc.speed));
+		//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+		time2 = HAL_GetTick();
 		//HAL_UART_Transmit(&huart2, Pitch_Message, sizeof(Pitch_Message), 10000);
 			//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
 	}
@@ -330,11 +405,11 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -423,7 +498,7 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x10909CEC;
+  hi2c2.Init.Timing = 0x00909BEB;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -548,7 +623,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 95;
+  htim3.Init.Prescaler = 79;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -662,12 +737,12 @@ static void MX_TIM5_Init(void)
 
   /* USER CODE END TIM5_Init 1 */
   htim5.Instance = TIM5;
-  htim5.Init.Prescaler = 0;
+  htim5.Init.Prescaler = 95;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim5.Init.Period = 4294967295;
+  htim5.Init.Period = 65535;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI2;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
@@ -689,6 +764,44 @@ static void MX_TIM5_Init(void)
   /* USER CODE BEGIN TIM5_Init 2 */
 
   /* USER CODE END TIM5_Init 2 */
+
+}
+
+/**
+  * @brief TIM6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM6_Init(void)
+{
+
+  /* USER CODE BEGIN TIM6_Init 0 */
+
+  /* USER CODE END TIM6_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 79;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 65535;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
+
+  /* USER CODE END TIM6_Init 2 */
 
 }
 

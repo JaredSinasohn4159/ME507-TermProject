@@ -1,3 +1,4 @@
-../Core/Src/encoder_handler.c:9:6:encoder_read_curr_state	32	static
-../Core/Src/encoder_handler.c:28:9:encoder_calc_speed	16	static
-../Core/Src/encoder_handler.c:31:6:zero	16	static
+../Core/Src/encoder_handler.c:9:6:encoder_read_curr_state	24	static
+../Core/Src/encoder_handler.c:20:9:encoder_calc_speed	24	static
+../Core/Src/encoder_handler.c:26:6:zero	16	static
+../Core/Src/encoder_handler.c:36:9:delta	40	static

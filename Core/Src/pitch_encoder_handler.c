@@ -8,7 +8,7 @@
 
 uint32_t get_pitch(PitchEncoder* p_enc){
 	encoder_read_curr_state((p_enc->encoder));
-	p_enc->delta = p_enc->pitch-p_enc->encoder->pos;
+	p_enc->delta = p_enc->pitch+p_enc->encoder->pos;
 	p_enc->pitch += p_enc->delta;
 	if(p_enc->delta != 0){
 		p_enc->delta = p_enc->delta;

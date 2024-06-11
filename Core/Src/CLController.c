@@ -17,7 +17,7 @@ uint32_t run(CLController* con,  int32_t measured){
 		con->prev_err_index += 1;
 	}
 	if(con->kd > 0 && con->prev_err_index >= con->prev_err_list_length){
-		con->slope = (con->prev_err_list[con->prev_err_index-1]-con->prev_err_list[0])/(con->curr_time - con->initial_time);
+		con->slope = ((con->prev_err_list[con->prev_err_index-1]-con->prev_err_list[0]))*1000/(con->curr_time - con->initial_time);
 		con->eff += con->kd * con->slope;
 		con->prev_err_index = 0;
 	}
