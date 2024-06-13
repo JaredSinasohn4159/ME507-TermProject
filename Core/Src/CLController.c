@@ -10,8 +10,8 @@ uint32_t run(CLController* con,  int32_t measured){
 	con->curr = measured;
 	con->curr_time = HAL_GetTick();
 	con->err = con->setpoint - con->curr;
-	con->err_acc = con->err_acc + con->curr;
-	con->eff = con->kp * con->err + con->ki * con->err_acc;
+	con->err_acc = con->err_acc + con->err;
+	con->eff = (con->kf * measured)/1000000 + (con->kp * con->err)/1000000 + (con->ki * con->err_acc)/1000000;
 	if(con->kd > 0){
 		con->prev_err_list[con->prev_err_index] = con->err;
 		con->prev_err_index += 1;

@@ -94,7 +94,8 @@ static Encoder pitch = {.timer = &htim5,
 						.prev_time = 0,
 						.curr_time = 1,
 						.pos = 0,
-						.speed = 0
+						.speed = 0,
+						.dx = 0
 };
 static Encoder mot_enc = {.timer = &htim4,
 						.timing_timer = &htim6,
@@ -103,31 +104,15 @@ static Encoder mot_enc = {.timer = &htim4,
 						.prev_time = 0,
 						.curr_time = 1,
 						.pos = 0,
-						.speed = 0
+						.speed = 0,
+						.dx = 0
 };
-/*
-   typedef struct{
-	float kp;
-	float ki;
-	float kd;
-	int32_t setpoint;
-	int32_t eff;
-	int32_t curr;
-	int32_t err;
-	int32_t err_acc;
-	uint8_t prev_err_index;
-	uint32_t initial_time;
-	uint32_t curr_time;
-	int32_t slope;
-	uint32_t prev_err_list_length;
-	int32_t prev_err_list[];
-}CLController;
- */
 static CLController m_con = {
-		.kp = 1,
-		.ki = 10,
+		.kp = 500,
+		.ki = 0,
 		.kd = 0,
-		.setpoint = 2475,
+		.kf = 706,
+		.setpoint = 0,
 		.eff = 0,
 		.curr = 0,
 		.err = 0,
@@ -144,16 +129,24 @@ static PitchEncoder pe = {.pitch = 0,
 						  .delta = 0
 };
 static Display display = {.hi2c = &hi2c2,
-					  .curr_note = 0
+					  .curr_note = 0,
+					  .huart = &huart2
 };
 uint8_t t1state = 0;
-uint8_t Buffer[25] = {0};
+uint8_t t2state = 0;
+uint8_t Buffer[50] = {0};
+uint8_t Pos_Buffer[50] = {0};
+uint8_t Speed_Buffer[50] = {0};
 uint8_t Space[] = " - ";
 uint8_t StartMSG[] = "Starting I2C Scanning: \r\n";
-uint8_t Pitch_Message[] = "Current Pitch: ";
 uint8_t EndMSG[] = "Done! \r\n\r\n";
-static int32_t motor_speeds[12] = {2475,2623,2778,2943,3119,3304,3500,3708,3929,4163,4410,4672};
+static int32_t motor_speeds[12] = {56320,59679,63222,66970,70963,75182,79647,84378,89395,94720,100352,106312};
 static uint32_t ptch;
+static uint32_t timmy = 0;
+static uint32_t timmy2 = 0;
+uint8_t led_buff;
+static int32_t eff = 0;
+uint8_t Eff_Buffer[50] = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -170,6 +163,7 @@ static void MX_TIM8_Init(void);
 static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 void display_task(uint8_t* state);
+void motor_task (uint8_t* state);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -188,14 +182,30 @@ void display_task(uint8_t* state){
 void motor_task (uint8_t* state){
 	switch(*state){
 		case 0:
-			state = 1;
+			*state = 1;
+			timmy = HAL_GetTick();
+			timmy2 = HAL_GetTick();
 			break;
 		case 1:
-			m_con.setpoint = motor_speeds[ptch];
-			encoder_read_curr_state(&mot_enc);
-			run(&m_con,mot_enc.speed);
-			break;
-
+			if(HAL_GetTick() >= timmy + 2){
+				timmy = HAL_GetTick();
+				m_con.setpoint = motor_speeds[ptch];
+				//m_con.setpoint = 337510/4;
+				encoder_read_curr_state(&mot_enc);
+				eff = run(&m_con,mot_enc.speed);
+				motor_set_duty_cycle(&m, eff);
+				//motor_set_duty_cycle(&m, 50);
+				if(HAL_GetTick() >= timmy2 + 1000){
+					timmy2 = HAL_GetTick();
+					/*sprintf(Speed_Buffer, "Speed = %d \r\n",mot_enc.speed);
+					HAL_UART_Transmit(&huart2, Speed_Buffer, sizeof(Speed_Buffer), 10000);
+					sprintf(Pos_Buffer, "err = %d \r\n",m_con.err);
+					HAL_UART_Transmit(&huart2, Pos_Buffer, sizeof(Pos_Buffer), 10000);
+					sprintf(Eff_Buffer, "Effort = %d% \r\n\n\r",eff);
+					HAL_UART_Transmit(&huart2, Eff_Buffer, sizeof(Eff_Buffer), 10000);*/
+				}
+				break;
+			}
 	}
 }
 /* USER CODE END 0 */
@@ -239,47 +249,145 @@ int main(void)
   MX_TIM8_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-  HAL_Init();
-  SystemClock_Config();
-  MX_GPIO_Init();
   MX_I2C2_Init();
-  MX_USART2_UART_Init();
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
-  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_1);
-  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_2);
+  HAL_TIM_Encoder_Start_IT(&htim5, TIM_CHANNEL_ALL);
   //! allow for receiving of interrupts through uart
   HAL_UART_Receive_IT(&huart2, (uint8_t*)&char_in, 1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-  htim1.Instance->CCR1 = 1000;
-  htim1.Instance->CCR2 = 0;
+  htim5.Instance->CNT = ((htim5.Init.Period)+1)/2;
   HAL_TIM_Base_Start(&htim6);
+  uint8_t i = 0, ret;
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10,GPIO_PIN_SET);
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2,GPIO_PIN_SET);
-  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x14, 1, (uint8_t*)0b01010101, 1, 250);
-  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x15, 1, (uint8_t*)0b01010101, 1, 250);
-  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x16, 1, (uint8_t*)0b01010101, 1, 250);
-  HAL_I2C_Mem_Write(&hi2c2, 0b11000001, 0x17, 1, (uint8_t*)0b01010101, 1, 250);
-  uint8_t i = 0, ret;
-  HAL_UART_Transmit(&huart2, StartMSG, sizeof(StartMSG), 10000);
-        for(i=1; i<128; i++)
-        {
-            ret = HAL_I2C_IsDeviceReady(&hi2c2, (uint16_t)(i<<1), 3, 5);
-            if (ret != HAL_OK) /* No ACK Received At That Address */
-            {
-                HAL_UART_Transmit(&huart2, Space, sizeof(Space), 10000);
-            }
-            else if(ret == HAL_OK)
-            {
-                sprintf(Buffer, "0x%X", i);
-                HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-            }
-        }
-        HAL_UART_Transmit(&huart2, EndMSG, sizeof(EndMSG), 10000);
+  uint8_t aTxBuffer[2] = {};
+  aTxBuffer[0] = 0x00;
+  aTxBuffer[1] = 0x00;
+  uint8_t lvl = 85;
+  uint8_t addr = 0b11000000;
+  HAL_I2C_Mem_Read(&hi2c2, addr, 0x00, 1, led_buff, 1, 500);
+    sprintf(Buffer, "Reg 0x14x: %X \r\n",led_buff);
+    HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  HAL_Delay(500);
+  ret = HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x14, 1, lvl, 1, 500);
+  /*HAL_Delay(500);
+  if(ret!=HAL_OK){
+	  sprintf(Buffer, "did not work :(\n\r");
+	  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  }else if(ret == HAL_OK)
+  {
+      sprintf(Buffer, "worked!\n\r");
+      HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  }*/
+  HAL_Delay(500);
+  ret = HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x15, 1, lvl, 1, 500);
+    /*if(ret!=HAL_OK){
+  	  sprintf(Buffer, "did not work :(\n\r");
+  	  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }else if(ret == HAL_OK)
+    {
+        sprintf(Buffer, "worked!\n\r");
+        HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }*/
+  HAL_Delay(500);
+  ret = HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x16, 1, lvl, 1, 500);
+    /*if(ret!=HAL_OK){
+  	  sprintf(Buffer, "did not work :(\n\r");
+  	  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }else if(ret == HAL_OK)
+    {
+        sprintf(Buffer, "worked!\n\r");
+        HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }*/
+  HAL_Delay(500);
+  ret = HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x17, 1, lvl, 1, 500);
+    /*if(ret!=HAL_OK){
+  	  sprintf(Buffer, "did not work :(\n\r");
+  	  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }else if(ret == HAL_OK)
+    {
+        sprintf(Buffer, "worked!\n\r");
+        HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }*/
+  HAL_I2C_Mem_Read(&hi2c2, addr, 0x14, 1, (uint8_t*)led_buff, 1, 500);
+  sprintf(Buffer, "Reg 0x14x: %X \r\n",led_buff);
+  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  HAL_I2C_Mem_Read(&hi2c2, addr, 0x15, 1, led_buff, 1, 500);
+  sprintf(Buffer, "Reg 0x15x: %X \r\n",led_buff);
+    HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  HAL_I2C_Mem_Read(&hi2c2, addr, 0x16, 1, led_buff, 1, 500);
+  sprintf(Buffer, "Reg 0x16x: %X \r\n",led_buff);
+    HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  HAL_I2C_Mem_Read(&hi2c2, addr, 0x17, 1, led_buff, 1, 500);
+  sprintf(Buffer, "Reg 0x17x: %X \r\n",led_buff);
+    HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+  /*if(ret!=HAL_OK){
+  	  sprintf(Buffer, "did not work :(\n\r");
+  	  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }else if(ret == HAL_OK)
+    {
+        sprintf(Buffer, "worked!\n\r");
+        HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }*/
+  //HAL_Delay(500);
+  //ret = HAL_I2C_Master_Transmit(&hi2c2, 0b11000001, ((uint8_t*)1),1,100);
+  /*if(ret!=HAL_OK){
+  	  sprintf(Buffer, "did not work :(\n\r");
+  	  HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }else if(ret == HAL_OK)
+    {
+        sprintf(Buffer, "worked!\n\r");
+        HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+    }*/
         uint32_t time1 = HAL_GetTick();
         uint32_t time2 = HAL_GetTick();
         int32_t sped = 0;
-        HAL_I2C_Master_Transmit((&hi2c2), 0b11000001, ((uint8_t*)0b1101100001111000),2,100);
+        //HAL_I2C_Master_Transmit((&hi2c2), 0b11000001, ((uint8_t*)0b1101100001111000),2,100);
+        uint8_t prev_count = 1;
+
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x02, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x03, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x04, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x05, 1, (uint8_t*)0xFF, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x06, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x07, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x08, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x09, 1, (uint8_t*)0xFF, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x0A, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x0B, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x0C, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x0D, 1, (uint8_t*)0xFF, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x0E, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x0F, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x10, 1, (uint8_t*)lvl, 1, 100);
+  //HAL_I2C_Mem_Write(&hi2c2, 0b11000000, 0x11, 1, (uint8_t*)0xFF, 1, 100);
+/*
+  uint8_t TLC59116_PWM0_AUTOINCR = 0x82;
+  HAL_UART_Transmit(&huart2, StartMSG, sizeof(StartMSG), 10000);
+      for(i=1; i<128; i++)
+      {
+          ret = HAL_I2C_IsDeviceReady(&hi2c2, (uint16_t)(i<<1), 3, 5);
+          if (ret != HAL_OK)
+          {
+              HAL_UART_Transmit(&huart2, Space, sizeof(Space), 10000);
+          }
+          else if(ret == HAL_OK)
+          {
+              sprintf(Buffer, "0x%X", i);
+              HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
+          }
+      }
+      HAL_UART_Transmit(&huart2, EndMSG, sizeof(EndMSG), 10000);
+  uint8_t bruh[] = { TLC59116_PWM0_AUTOINCR, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+  while(HAL_I2C_Master_Transmit(&hi2c2, 0xC0, *bruh, sizeof(bruh), 100) != HAL_OK)
+      {
+      HAL_Delay(1);
+	  if (HAL_I2C_GetError(&hi2c2) != HAL_I2C_ERROR_AF)
+          {
+              Error_Handler();
+          }
+      }*/
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -288,63 +396,10 @@ int main(void)
   while (1)
   {
 
-	char_in = 'r';
-	if(HAL_GetTick()>time1+50){
-		//encoder_read_curr_state(&mot_enc);
-		sped = mot_enc.speed;
-		//sprintf(Buffer, "Curr speed: %d  \r\n",(int)(mot_enc.speed));
-		//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-		time1 = HAL_GetTick();
-	}
-	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10,GPIO_PIN_SET);
-	uint8_t abcd = get_pitch(&pe);
-	//encoder_read_curr_state(&mot_enc);
-	if(HAL_GetTick()>time2+250){
-		sprintf(Buffer, "Current index: %d  \r\n",(pe.encoder->timer->Instance->CNT));
-		//sprintf(Buffer, "Current index: %d  \r\n",(abcd));
-		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-	}
-	switch(abcd){
-		case 0:
-			sprintf(Buffer, "A  \r\n");
-			break;
-		case 1:
-					sprintf(Buffer, "Bb \r\n");
-					break;
-		case 2:
-					sprintf(Buffer, "B  \r\n");
-					break;
-		case 3:
-					sprintf(Buffer, "C  \r\n");
-					break;
-		case 4:
-					sprintf(Buffer, "Db \r\n");
-					break;
-		case 5:
-					sprintf(Buffer, "D  \r\n");
-					break;
-		case 6:
-					sprintf(Buffer, "Eb \r\n");
-					break;
-		case 7:
-					sprintf(Buffer, "E  \r\n");
-					break;
-		case 8:
-					sprintf(Buffer, "F  \r\n");
-					break;
-		case 9:
-					sprintf(Buffer, "Gb \r\n");
-					break;
-		case 10:
-					sprintf(Buffer, "G  \r\n");
-					break;
-		case 11:
-					sprintf(Buffer, "Ab \r\n");
-					break;
-	}
 	//motor_set_duty_cycle(&m,100);
-	//display_task(&t1state);
-	if(HAL_GetTick()>time2+250){
+	display_task(&t1state);
+	motor_task(&t2state);
+	//if(HAL_GetTick()>time2+1001){
 
 		/*sprintf(Buffer, "Curr time: %d  \r\n",(int)(mot_enc.curr_time));
 		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
@@ -354,10 +409,10 @@ int main(void)
 		HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);*/
 		//sprintf(Buffer, "Curr speed: %d  \r\n",(int)(mot_enc.speed));
 		//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-		time2 = HAL_GetTick();
+		//time2 = HAL_GetTick();
 		//HAL_UART_Transmit(&huart2, Pitch_Message, sizeof(Pitch_Message), 10000);
 			//HAL_UART_Transmit(&huart2, Buffer, sizeof(Buffer), 10000);
-	}
+	//}
 
     /* USER CODE END WHILE */
 
@@ -405,11 +460,11 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -498,14 +553,14 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x00909BEB;
+  hi2c2.Init.Timing = 0xF010F3FE;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
   hi2c2.Init.OwnAddress2 = 0;
   hi2c2.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
   hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_ENABLE;
   if (HAL_I2C_Init(&hi2c2) != HAL_OK)
   {
     Error_Handler();
@@ -737,9 +792,9 @@ static void MX_TIM5_Init(void)
 
   /* USER CODE END TIM5_Init 1 */
   htim5.Instance = TIM5;
-  htim5.Init.Prescaler = 95;
+  htim5.Init.Prescaler = 0;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim5.Init.Period = 65535;
+  htim5.Init.Period = 1073741823;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
@@ -752,6 +807,10 @@ static void MX_TIM5_Init(void)
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
   if (HAL_TIM_Encoder_Init(&htim5, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OnePulse_Init(&htim5, TIM_OPMODE_SINGLE) != HAL_OK)
   {
     Error_Handler();
   }
@@ -950,7 +1009,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+//void HAL_TIM
 /* USER CODE END 4 */
 
 /**

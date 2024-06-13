@@ -8,18 +8,18 @@
 
 uint32_t get_pitch(PitchEncoder* p_enc){
 	encoder_read_curr_state((p_enc->encoder));
-	p_enc->delta = p_enc->pitch+p_enc->encoder->pos;
+	p_enc->delta = (int16_t)(p_enc->encoder->dx);
 	p_enc->pitch += p_enc->delta;
-	if(p_enc->delta != 0){
-		p_enc->delta = p_enc->delta;
+	if(p_enc->delta == 0){
+		return p_enc->pitch;
 	}
 	if(p_enc->pitch < 0){
 		p_enc->pitch += 12;
-		p_enc->encoder->timer->Instance->CNT = p_enc->pitch;
+		//p_enc->encoder->timer->Instance->CNT = p_enc->pitch;
 	}
 	if(p_enc->pitch >= 12){
 		p_enc->pitch -= 12;
-		p_enc->encoder->timer->Instance->CNT = p_enc->pitch;
+		//p_enc->encoder->timer->Instance->CNT = p_enc->pitch;
 	}
 	return p_enc->pitch;
 }

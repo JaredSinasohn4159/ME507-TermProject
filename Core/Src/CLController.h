@@ -14,6 +14,7 @@ typedef struct{
 	float kp;
 	float ki;
 	float kd;
+	float kf;
 	int32_t setpoint;
 	int32_t eff;
 	int32_t curr;

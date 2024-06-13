@@ -7,14 +7,14 @@
 #include "encoder_handler.h"
 
 void encoder_read_curr_state(Encoder* encoder){
-	encoder->curr_count = encoder->timer->Instance->CNT;
-	encoder->curr_time = encoder->timing_timer->Instance->CNT;
-	int32_t dx = delta(encoder->timer, encoder->prev_count,encoder->curr_count);
-	int32_t dt = delta(encoder->timing_timer, encoder->prev_time,encoder->curr_time);
-	encoder->pos = encoder->pos + dx;
-	encoder->speed = encoder_calc_speed(encoder,dx,dt);
 	encoder->prev_count = encoder->curr_count;
 	encoder->prev_time = encoder->curr_time;
+	encoder->curr_count = encoder->timer->Instance->CNT;
+	encoder->curr_time = encoder->timing_timer->Instance->CNT;
+	encoder->dx = delta(encoder->timer, encoder->prev_count,encoder->curr_count);
+	int32_t dt = delta(encoder->timing_timer, encoder->prev_time,encoder->curr_time);
+	encoder->pos = encoder->pos + encoder->dx;
+	encoder->speed = encoder_calc_speed(encoder,encoder->dx,dt);
 
 }
 int32_t encoder_calc_speed(Encoder* encoder, int32_t dx,int32_t dt){

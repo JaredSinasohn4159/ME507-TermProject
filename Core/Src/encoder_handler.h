@@ -24,6 +24,7 @@ typedef struct{
 	uint32_t curr_time;
 	int32_t pos;
 	int32_t speed;
+	int32_t dx;
 }Encoder;
 
 void encoder_read_curr_state(Encoder* encoder);

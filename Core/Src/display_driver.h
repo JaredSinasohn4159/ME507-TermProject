@@ -13,6 +13,7 @@
 typedef struct{
 	I2C_HandleTypeDef* hi2c;
 	uint8_t curr_note;
+	USART_TypeDef * huart;
 }Display;
 
 uint8_t display_note(Display* disp, uint8_t note);
