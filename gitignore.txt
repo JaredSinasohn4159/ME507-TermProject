@@ -63,5 +63,17 @@ types_c.taghl
 #CtrlP
 ctrlp.root
 
-#html
-*.html
+#others
+*.launch
+*.ld
+*.prefs
+*.settings
+*.mk
+*.list
+*.cyclo
+*Drivers/
+*Debug/
+*.settings/
+
+
+
