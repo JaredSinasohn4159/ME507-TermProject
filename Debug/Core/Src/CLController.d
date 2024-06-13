@@ -1,5 +1,5 @@
 Core/Src/CLController.o: ../Core/Src/CLController.c \
- ../Core/Src/CLController.h \
+ ../Core/Inc/CLController.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32L4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
@@ -34,7 +34,7 @@ Core/Src/CLController.o: ../Core/Src/CLController.c \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
-../Core/Src/CLController.h:
+../Core/Inc/CLController.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32L4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h:
