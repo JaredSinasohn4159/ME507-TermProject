@@ -1,0 +1,15 @@
+../Core/Src/main.c:171:6:display_task	16	static
+../Core/Src/main.c:182:6:motor_task	16	static
+../Core/Src/main.c:217:5:main	48	static
+../Core/Src/main.c:428:6:SystemClock_Config	96	static
+../Core/Src/main.c:478:13:MX_ADC1_Init	48	static
+../Core/Src/main.c:545:13:MX_I2C2_Init	8	static
+../Core/Src/main.c:593:13:MX_TIM1_Init	96	static
+../Core/Src/main.c:667:13:MX_TIM3_Init	40	static
+../Core/Src/main.c:732:13:MX_TIM4_Init	56	static
+../Core/Src/main.c:781:13:MX_TIM5_Init	56	static
+../Core/Src/main.c:834:13:MX_TIM6_Init	24	static
+../Core/Src/main.c:872:13:MX_TIM8_Init	40	static
+../Core/Src/main.c:928:13:MX_USART2_UART_Init	8	static
+../Core/Src/main.c:963:13:MX_GPIO_Init	48	static
+../Core/Src/main.c:1019:6:Error_Handler	4	static,ignoring_inline_asm
