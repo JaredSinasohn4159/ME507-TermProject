@@ -1,2 +1,0 @@
-../Core/Src/motor_driver.c:13:6:motor_set_duty_cycle	24	static
-../Core/Src/motor_driver.c:81:6:motor_enable_disable	24	static
