@@ -1,6 +1,4 @@
-/*! \mainpage ME 507 Strobe Tuner Documentation
-
-Project MembersL Jojo Penrose, Jared Sinasohn
+Project Members: Jojo Penrose, Jared Sinasohn
 
 Welcome to the ME 507 Strobe Tuner Documentation!
 
@@ -10,7 +8,7 @@ This website provides an overview of the software side of our ME 507 Strobe Tune
 
 A strobe tuner is a highly accurate device used for tuning musical instruments by measuring the frequency of sound waves. Unlike conventional tuners, which often use needle or LED indicators to show pitch deviation, a strobe tuner operates by comparing the sound wave of the instrument to a reference frequency. It uses a rotating disk with accurately patterned slits cut into it, illuminated by a strobe light, to visually represent the difference between the played note and the desired pitch. As the disk spins, patterns of light and dark bands appear to move. When the frequency of the played note matches the reference frequency, the bands appear stationary, indicating that the instrument is in tune. If the instrument is out of tune, the bands will appear to move, depending on whether the pitch is flat or sharp. 
 
-However, in our research, we found that most strobe tuners can be thousands of dollars, which is an amount of money many musicians are unable to afford.  So, our team set out to produce a strobe tuner running off a low-cost microcontroller with low cost parts to eventually make a low cost tuner that could one day be turned into a full product.  We designed custom PCB's, created a full 3d-printed body, and coded in C to create an initial prototype.  All in all, even though the initial prototype had many bugs, we were able to create a proof of concept showing our project is viable.  If you would like to see more about the project, including information about the PCB Design, Analog filtering, mechanical design, and the trials and tribulations, visit [this link](https://docs.google.com/document/d/1ZcnWdRxvwOcBsrmJdvSOL7kJm669_1bvG7WVEs5Oc88/edit?usp=sharing) which will take you to a Google Doc report about the project.
+However, in our research, we found that most strobe tuners can be thousands of dollars, which is an amount of money many musicians are unable to afford.  So, our team set out to produce a strobe tuner running off a low-cost microcontroller with low cost parts to eventually make a low cost tuner that could one day be turned into a full product.  We designed custom PCB's, created a full 3d-printed body, and coded in C to create an initial prototype.  All in all, even though the initial prototype had many bugs, we were able to create a proof of concept showing our project is viable.  If you would like to see more about the project, including information about the PCB Design, Analog filtering, mechanical design, and the trials and tribulations, see our [Final Report Here.](tuner_report.pdf)
 
 ## Features
 
