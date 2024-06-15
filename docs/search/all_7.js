@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['get_5fpitch_0',['get_pitch',['../pitch__encoder__handler_8h.html#ae30c094e6767f017185358c645160595',1,'get_pitch(PitchEncoder *p_enc):&#160;pitch_encoder_handler.c'],['../pitch__encoder__handler_8c.html#ae30c094e6767f017185358c645160595',1,'get_pitch(PitchEncoder *p_enc):&#160;pitch_encoder_handler.c']]],
+  ['getting_20started_20in_20software_1',['Getting Started in Software',['../index.html#autotoc_md2',1,'']]]
+];
