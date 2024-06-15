@@ -1,0 +1,190 @@
+\doxysection{doxy\+\_\+core/\+Inc/encoder\+\_\+handler.h File Reference}
+\hypertarget{encoder__handler_8h}{}\label{encoder__handler_8h}\index{doxy\_core/Inc/encoder\_handler.h@{doxy\_core/Inc/encoder\_handler.h}}
+
+
+The header file for a class that implements a generic quadrature encoder.  
+
+
+{\ttfamily \#include "{}stm32\+L4xx\+\_\+hal.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{struct_encoder}{Encoder}}
+\begin{DoxyCompactList}\small\item\em A generic implementation of a quadrature encoder that tracks the position of the encoder in counts and the speed the encoder is traveling at in counts per second. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{encoder__handler_8h_a2e99e34a584541bdb75991748fcfe787}{encoder\+\_\+read\+\_\+curr\+\_\+state}} (\mbox{\hyperlink{struct_encoder}{Encoder}} \texorpdfstring{$\ast$}{*}encoder)
+\item 
+int32\+\_\+t \mbox{\hyperlink{encoder__handler_8h_a3ca7f0f7eece0d5d5697afd087eb7c82}{encoder\+\_\+calc\+\_\+speed}} (\mbox{\hyperlink{struct_encoder}{Encoder}} \texorpdfstring{$\ast$}{*}encoder, int32\+\_\+t dx, int32\+\_\+t dt)
+\item 
+void \mbox{\hyperlink{encoder__handler_8h_a44bf467c45583a5b9aaa0ae50619101c}{zero}} (\mbox{\hyperlink{struct_encoder}{Encoder}} \texorpdfstring{$\ast$}{*}encoder)
+\item 
+int32\+\_\+t \mbox{\hyperlink{encoder__handler_8h_a49a271d7ac63aab3145345029461a211}{delta}} (TIM\+\_\+\+Handle\+Type\+Def \texorpdfstring{$\ast$}{*}timer, uint32\+\_\+t initial, uint32\+\_\+t final)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The header file for a class that implements a generic quadrature encoder. 
+
+\begin{DoxyDate}{Date}
+May 18, 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jared Sinasohn 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{encoder__handler_8h_a49a271d7ac63aab3145345029461a211}\label{encoder__handler_8h_a49a271d7ac63aab3145345029461a211} 
+\index{encoder\_handler.h@{encoder\_handler.h}!delta@{delta}}
+\index{delta@{delta}!encoder\_handler.h@{encoder\_handler.h}}
+\doxysubsubsection{\texorpdfstring{delta()}{delta()}}
+{\footnotesize\ttfamily int32\+\_\+t delta (\begin{DoxyParamCaption}\item[{TIM\+\_\+\+Handle\+Type\+Def \texorpdfstring{$\ast$}{*}}]{timer,  }\item[{uint32\+\_\+t}]{initial,  }\item[{uint32\+\_\+t}]{final }\end{DoxyParamCaption})}
+
+This function calculates a delta between two values from a timer, while accounting for overflow. 
+\begin{DoxyParams}{Parameters}
+{\em timer} & The timer the initial and final values come from \\
+\hline
+{\em initial} & The initial value of the timer \\
+\hline
+{\em final} & The final value of the timer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+delta The corrected delta value to account for overflow and underflow. 
+\end{DoxyReturn}
+get the auto reload value of the timer since it is the maximum value a timer can be
+
+we can determine if something has overflowed or underflowed be assuming a delta will never be greater than half the auto reload value, which if the encoder is read enough is a good assumption
+
+if the value underflows, the delta will be a positive value greater than overflow, so just subtract off ARR+1 from the underflowed delta
+
+similarly, if the value overflows, the delta will be a negative value less than negative of overerflow, so add ARR+1 to the overflowed delta
+
+Definition at line \mbox{\hyperlink{encoder__handler_8c_source_l00071}{71}} of file \mbox{\hyperlink{encoder__handler_8c_source}{encoder\+\_\+handler.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00073\ \ \ \ \ uint32\_t\ ARR\ =\ (int32\_t)(timer-\/>Init.Period\ );}
+\DoxyCodeLine{00075\ \ \ \ \ int32\_t\ overflow\ =\ ((ARR-\/1)/2)+1;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//1\ Calculate\ the\ delta}}
+\DoxyCodeLine{00077\ \ \ \ \ int32\_t\ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ =\ \textcolor{keyword}{final}-\/initial;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ >=\ overflow)\{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ =\ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ -\/\ overflow*2;}
+\DoxyCodeLine{00082\ \ \ \ \ \}\textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ <=\ -\/1*overflow)\{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ =\ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}\ +\ overflow;}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}};}
+\DoxyCodeLine{00086\ \}}
+
+\end{DoxyCode}
+\Hypertarget{encoder__handler_8h_a3ca7f0f7eece0d5d5697afd087eb7c82}\label{encoder__handler_8h_a3ca7f0f7eece0d5d5697afd087eb7c82} 
+\index{encoder\_handler.h@{encoder\_handler.h}!encoder\_calc\_speed@{encoder\_calc\_speed}}
+\index{encoder\_calc\_speed@{encoder\_calc\_speed}!encoder\_handler.h@{encoder\_handler.h}}
+\doxysubsubsection{\texorpdfstring{encoder\_calc\_speed()}{encoder\_calc\_speed()}}
+{\footnotesize\ttfamily int32\+\_\+t encoder\+\_\+calc\+\_\+speed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_encoder}{Encoder}} \texorpdfstring{$\ast$}{*}}]{encoder,  }\item[{int32\+\_\+t}]{dx,  }\item[{int32\+\_\+t}]{dt }\end{DoxyParamCaption})}
+
+This function calculates a speed based on a differential position and a differential time. 
+\begin{DoxyParams}{Parameters}
+{\em encoder} & The encoder instance to operate on \\
+\hline
+{\em dx} & The differential position term in encoder counts. \\
+\hline
+{\em dt} & The differential time term in microseconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The calculated speed in counts per second 
+\end{DoxyReturn}
+if the delta time is zero, return the previous speed to avoid divide by zero errors.
+
+return the speed in counts/second knowing that dt is in microseconds
+
+Definition at line \mbox{\hyperlink{encoder__handler_8c_source_l00039}{39}} of file \mbox{\hyperlink{encoder__handler_8c_source}{encoder\+\_\+handler.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordflow}{if}(dt\ ==\ 0)\{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ encoder-\/>\mbox{\hyperlink{struct_encoder_a36dda2666e5436e608a494230ca9076b}{speed}};}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{return}\ ((dx)*1000000)/dt;}
+\DoxyCodeLine{00046\ \}}
+
+\end{DoxyCode}
+\Hypertarget{encoder__handler_8h_a2e99e34a584541bdb75991748fcfe787}\label{encoder__handler_8h_a2e99e34a584541bdb75991748fcfe787} 
+\index{encoder\_handler.h@{encoder\_handler.h}!encoder\_read\_curr\_state@{encoder\_read\_curr\_state}}
+\index{encoder\_read\_curr\_state@{encoder\_read\_curr\_state}!encoder\_handler.h@{encoder\_handler.h}}
+\doxysubsubsection{\texorpdfstring{encoder\_read\_curr\_state()}{encoder\_read\_curr\_state()}}
+{\footnotesize\ttfamily void encoder\+\_\+read\+\_\+curr\+\_\+state (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_encoder}{Encoder}} \texorpdfstring{$\ast$}{*}}]{encoder }\end{DoxyParamCaption})}
+
+This function reads the current encoder state and uses it to calculate the speed and position of the encoder. 
+\begin{DoxyParams}{Parameters}
+{\em encoder} & The encoder instance to operate on. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+If the timing\+\_\+timer is set up correctly for the inputted encoder, this function should be called no faster than every microsecond. 
+\end{DoxyAttention}
+set the previous times and previous counts to the previously current values
+
+get the count and time values from the two timers
+
+calculate the difference between the current counts/times and previous counts/times using the delta function
+
+set the encoder position to be the previous encoder position plus the delta position
+
+set the speed of the encoder to the calculated value via \doxylink{encoder__handler_8c_a3ca7f0f7eece0d5d5697afd087eb7c82}{encoder\+\_\+calc\+\_\+speed()}
+
+Definition at line \mbox{\hyperlink{encoder__handler_8c_source_l00015}{15}} of file \mbox{\hyperlink{encoder__handler_8c_source}{encoder\+\_\+handler.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}{prev\_count}}\ =\ encoder-\/>\mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{curr\_count}};}
+\DoxyCodeLine{00018\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}{prev\_time}}\ =\ encoder-\/>\mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}};}
+\DoxyCodeLine{00020\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{curr\_count}}\ =\ encoder-\/>\mbox{\hyperlink{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CNT;}
+\DoxyCodeLine{00021\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}}\ =\ encoder-\/>\mbox{\hyperlink{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}{timing\_timer}}-\/>Instance-\/>CNT;}
+\DoxyCodeLine{00023\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}}\ =\ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}(encoder-\/>\mbox{\hyperlink{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}{timer}},\ encoder-\/>\mbox{\hyperlink{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}{prev\_count}},encoder-\/>\mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{curr\_count}});}
+\DoxyCodeLine{00024\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8}{dt}}\ =\ \mbox{\hyperlink{encoder__handler_8c_a49a271d7ac63aab3145345029461a211}{delta}}(encoder-\/>\mbox{\hyperlink{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}{timing\_timer}},\ encoder-\/>\mbox{\hyperlink{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}{prev\_time}},encoder-\/>\mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}});}
+\DoxyCodeLine{00026\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}{pos}}\ =\ encoder-\/>\mbox{\hyperlink{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}{pos}}\ +\ encoder-\/>\mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}};}
+\DoxyCodeLine{00028\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a36dda2666e5436e608a494230ca9076b}{speed}}\ =\ \mbox{\hyperlink{encoder__handler_8c_a3ca7f0f7eece0d5d5697afd087eb7c82}{encoder\_calc\_speed}}(encoder,encoder-\/>\mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}},encoder-\/>\mbox{\hyperlink{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8}{dt}});}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \}}
+
+\end{DoxyCode}
+\Hypertarget{encoder__handler_8h_a44bf467c45583a5b9aaa0ae50619101c}\label{encoder__handler_8h_a44bf467c45583a5b9aaa0ae50619101c} 
+\index{encoder\_handler.h@{encoder\_handler.h}!zero@{zero}}
+\index{zero@{zero}!encoder\_handler.h@{encoder\_handler.h}}
+\doxysubsubsection{\texorpdfstring{zero()}{zero()}}
+{\footnotesize\ttfamily void zero (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_encoder}{Encoder}} \texorpdfstring{$\ast$}{*}}]{encoder }\end{DoxyParamCaption})}
+
+This function zeros the encoder, including the timing\+\_\+timer and timer timers. 
+\begin{DoxyParams}{Parameters}
+{\em encoder} & The encoder instance to operate on \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8c_source_l00052}{52}} of file \mbox{\hyperlink{encoder__handler_8c_source}{encoder\+\_\+handler.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CNT\ =\ 0;}
+\DoxyCodeLine{00054\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}{timing\_timer}}-\/>Instance-\/>CNT\ =\ 0;}
+\DoxyCodeLine{00055\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}{prev\_count}}\ =\ 0;}
+\DoxyCodeLine{00056\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{curr\_count}}\ =\ 0;}
+\DoxyCodeLine{00057\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}{prev\_time}}\ =\ 0;}
+\DoxyCodeLine{00058\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}}\ =\ 1;}
+\DoxyCodeLine{00059\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}{pos}}\ =\ 0;}
+\DoxyCodeLine{00060\ \ \ \ \ encoder-\/>\mbox{\hyperlink{struct_encoder_a36dda2666e5436e608a494230ca9076b}{speed}}\ =\ 0;}
+\DoxyCodeLine{00061\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,250 @@
+\doxysection{CLController Class Reference}
+\hypertarget{struct_c_l_controller}{}\label{struct_c_l_controller}\index{CLController@{CLController}}
+
+
+An implementation of a PIDF (F = Feedforward constant) closed loop controller. It is a generic controller that takes in a measurement, controller constants, and a setpoint and outputs an effort to be sent to the actuator.  
+
+
+
+
+{\ttfamily \#include $<$CLController.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a2ea4cd350e19c81c4709080795260a78}{kp}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a8fc5451919c881c9f365a23f80a7066f}{ki}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a8d3d5860fec9eb2c248c19359d9f8fd6}{kd}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_af6f6dd2aceffa3ad6e8efbb61754a355}{kf}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a4cbcc732c16f2b337c79aacb6abcd996}{setpoint}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797}{eff}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_aa23d09031b44d4b742c938bba2bd3d08}{curr}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}{err}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a}{err\+\_\+acc}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}{prev\+\_\+err\+\_\+index}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a8f6fe8e7268551d335673047baf1bf56}{initial\+\_\+time}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588}{curr\+\_\+time}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_a605033f7cee9b2ab60378009befa6292}{slope}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_abfd85f5e9e777f11ce6c0732f7dac9ff}{prev\+\_\+err\+\_\+list\+\_\+length}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_c_l_controller_af1e57fe0d48cf1bebdd3fb6aef420924}{prev\+\_\+err\+\_\+list}} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An implementation of a PIDF (F = Feedforward constant) closed loop controller. It is a generic controller that takes in a measurement, controller constants, and a setpoint and outputs an effort to be sent to the actuator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kp} & The propotional control constant multiplied by 10\texorpdfstring{$^\wedge$}{\string^}6 for accuracy reasons \\
+\hline
+{\em ki} & The integral control constant multiplied by 10\texorpdfstring{$^\wedge$}{\string^}6 for accuracy reasons \\
+\hline
+{\em kd} & The derivative control constant multiplied by 10\texorpdfstring{$^\wedge$}{\string^}6 for accuracy reasons \\
+\hline
+{\em kf} & The Feedforward constant multiplied by 10\texorpdfstring{$^\wedge$}{\string^}6 for accuracy reasons. The feedforward constant allows for simpler speed control in this project. \\
+\hline
+{\em setpoint} & The reference input value of the controller \\
+\hline
+{\em eff} & The output effort calculated by the closed loop controller \\
+\hline
+{\em curr} & The currently measured value of the sensor in the loop \\
+\hline
+{\em err} & The error between the setpoint and measured values, used for proportional control \\
+\hline
+{\em err\+\_\+acc} & How much error has been accumulating over time, used to estimate an integral control \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the following parameters all have to do with derivative control. Due to the nasty things noise can do to derivative control, a simple impulse filter has been implemented. It works by accumulating a list of error values and taking the slope vs time of that list once the list is full, and using that derivative list until the list fills again. This effectively filters out impulses due to the averaging, and thus creates a smoother, noise-\/free derivative control. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+\_\+err\+\_\+index} & the index for the list of previous errors \\
+\hline
+{\em initial\+\_\+time} & The initial time when the controller began calculating derivative error data \\
+\hline
+{\em curr\+\_\+time} & The current time at which derivitive error has been calculated \\
+\hline
+{\em slope} & The overall slope of the list of derivative errors \\
+\hline
+{\em prev\+\_\+err\+\_\+list\+\_\+length} & The number of error samples to be taken for the list, as chosen by the control programmer \\
+\hline
+{\em prev\+\_\+err\+\_\+list\mbox{[}$\,$\mbox{]}} & The list previous error values are stored in. @\+Attention this must be the same length as the previous\+\_\+err\+\_\+list\+\_\+length \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00038}{38}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_c_l_controller_aa23d09031b44d4b742c938bba2bd3d08}\label{struct_c_l_controller_aa23d09031b44d4b742c938bba2bd3d08} 
+\index{CLController@{CLController}!curr@{curr}}
+\index{curr@{curr}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{curr}{curr}}
+{\footnotesize\ttfamily int32\+\_\+t curr}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00045}{45}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588}\label{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588} 
+\index{CLController@{CLController}!curr\_time@{curr\_time}}
+\index{curr\_time@{curr\_time}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{curr\_time}{curr\_time}}
+{\footnotesize\ttfamily uint32\+\_\+t curr\+\_\+time}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00050}{50}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797}\label{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797} 
+\index{CLController@{CLController}!eff@{eff}}
+\index{eff@{eff}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{eff}{eff}}
+{\footnotesize\ttfamily int32\+\_\+t eff}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00044}{44}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}\label{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6} 
+\index{CLController@{CLController}!err@{err}}
+\index{err@{err}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{err}{err}}
+{\footnotesize\ttfamily int32\+\_\+t err}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00046}{46}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a}\label{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a} 
+\index{CLController@{CLController}!err\_acc@{err\_acc}}
+\index{err\_acc@{err\_acc}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{err\_acc}{err\_acc}}
+{\footnotesize\ttfamily int32\+\_\+t err\+\_\+acc}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00047}{47}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a8f6fe8e7268551d335673047baf1bf56}\label{struct_c_l_controller_a8f6fe8e7268551d335673047baf1bf56} 
+\index{CLController@{CLController}!initial\_time@{initial\_time}}
+\index{initial\_time@{initial\_time}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{initial\_time}{initial\_time}}
+{\footnotesize\ttfamily uint32\+\_\+t initial\+\_\+time}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00049}{49}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a8d3d5860fec9eb2c248c19359d9f8fd6}\label{struct_c_l_controller_a8d3d5860fec9eb2c248c19359d9f8fd6} 
+\index{CLController@{CLController}!kd@{kd}}
+\index{kd@{kd}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{kd}{kd}}
+{\footnotesize\ttfamily uint32\+\_\+t kd}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00041}{41}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_af6f6dd2aceffa3ad6e8efbb61754a355}\label{struct_c_l_controller_af6f6dd2aceffa3ad6e8efbb61754a355} 
+\index{CLController@{CLController}!kf@{kf}}
+\index{kf@{kf}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{kf}{kf}}
+{\footnotesize\ttfamily uint32\+\_\+t kf}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00042}{42}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a8fc5451919c881c9f365a23f80a7066f}\label{struct_c_l_controller_a8fc5451919c881c9f365a23f80a7066f} 
+\index{CLController@{CLController}!ki@{ki}}
+\index{ki@{ki}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{ki}{ki}}
+{\footnotesize\ttfamily uint32\+\_\+t ki}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00040}{40}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a2ea4cd350e19c81c4709080795260a78}\label{struct_c_l_controller_a2ea4cd350e19c81c4709080795260a78} 
+\index{CLController@{CLController}!kp@{kp}}
+\index{kp@{kp}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{kp}{kp}}
+{\footnotesize\ttfamily uint32\+\_\+t kp}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00039}{39}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}\label{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f} 
+\index{CLController@{CLController}!prev\_err\_index@{prev\_err\_index}}
+\index{prev\_err\_index@{prev\_err\_index}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{prev\_err\_index}{prev\_err\_index}}
+{\footnotesize\ttfamily uint8\+\_\+t prev\+\_\+err\+\_\+index}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00048}{48}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_af1e57fe0d48cf1bebdd3fb6aef420924}\label{struct_c_l_controller_af1e57fe0d48cf1bebdd3fb6aef420924} 
+\index{CLController@{CLController}!prev\_err\_list@{prev\_err\_list}}
+\index{prev\_err\_list@{prev\_err\_list}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{prev\_err\_list}{prev\_err\_list}}
+{\footnotesize\ttfamily int32\+\_\+t prev\+\_\+err\+\_\+list\mbox{[}$\,$\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00053}{53}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_abfd85f5e9e777f11ce6c0732f7dac9ff}\label{struct_c_l_controller_abfd85f5e9e777f11ce6c0732f7dac9ff} 
+\index{CLController@{CLController}!prev\_err\_list\_length@{prev\_err\_list\_length}}
+\index{prev\_err\_list\_length@{prev\_err\_list\_length}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{prev\_err\_list\_length}{prev\_err\_list\_length}}
+{\footnotesize\ttfamily uint32\+\_\+t prev\+\_\+err\+\_\+list\+\_\+length}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00052}{52}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a4cbcc732c16f2b337c79aacb6abcd996}\label{struct_c_l_controller_a4cbcc732c16f2b337c79aacb6abcd996} 
+\index{CLController@{CLController}!setpoint@{setpoint}}
+\index{setpoint@{setpoint}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{setpoint}{setpoint}}
+{\footnotesize\ttfamily int32\+\_\+t setpoint}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00043}{43}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+\Hypertarget{struct_c_l_controller_a605033f7cee9b2ab60378009befa6292}\label{struct_c_l_controller_a605033f7cee9b2ab60378009befa6292} 
+\index{CLController@{CLController}!slope@{slope}}
+\index{slope@{slope}!CLController@{CLController}}
+\doxysubsubsection{\texorpdfstring{slope}{slope}}
+{\footnotesize\ttfamily int32\+\_\+t slope}
+
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8h_source_l00051}{51}} of file \mbox{\hyperlink{_c_l_controller_8h_source}{CLController.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+doxy\+\_\+core/\+Inc/\mbox{\hyperlink{_c_l_controller_8h}{CLController.\+h}}\end{DoxyCompactItemize}

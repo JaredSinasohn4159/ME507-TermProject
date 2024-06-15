@@ -1,4 +1,2 @@
-../Core/Src/controller_driver.c:8:6:controller_driver_calc_per1	24	static
-../Core/Src/controller_driver.c:14:6:controller_driver_calc_per2	24	static
-../Core/Src/controller_driver.c:20:9:controller_driver_calc_doot1	16	static
-../Core/Src/controller_driver.c:24:9:controller_driver_calc_doot2	16	static
+../Core/Src/controller_driver.c:15:6:controller_driver_calc_per1	24	static
+../Core/Src/controller_driver.c:26:6:controller_driver_calc_per2	24	static

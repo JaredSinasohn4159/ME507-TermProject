@@ -1,0 +1,35 @@
+\doxysection{encoder\+\_\+handler.\+h}
+\hypertarget{encoder__handler_8h_source}{}\label{encoder__handler_8h_source}\index{doxy\_core/Inc/encoder\_handler.h@{doxy\_core/Inc/encoder\_handler.h}}
+\mbox{\hyperlink{encoder__handler_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ SRC\_ENCODER\_HANDLER\_H\_}}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ SRC\_ENCODER\_HANDLER\_H\_}}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}stm32L4xx\_hal.h"{}}}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00032}\mbox{\hyperlink{struct_encoder}{00032}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00033}\mbox{\hyperlink{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}{00033}}\ \ \ \ \ TIM\_HandleTypeDef*\ \mbox{\hyperlink{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}{timer}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00034}\mbox{\hyperlink{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}{00034}}\ \ \ \ \ TIM\_HandleTypeDef*\ \mbox{\hyperlink{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}{timing\_timer}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00035}\mbox{\hyperlink{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}{00035}}\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}{prev\_count}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00036}\mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{00036}}\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{curr\_count}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00037}\mbox{\hyperlink{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}{00037}}\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}{prev\_time}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00038}\mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{00038}}\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00039}\mbox{\hyperlink{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}{00039}}\ \ \ \ \ int32\_t\ \mbox{\hyperlink{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}{pos}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00040}\mbox{\hyperlink{struct_encoder_a36dda2666e5436e608a494230ca9076b}{00040}}\ \ \ \ \ int32\_t\ \mbox{\hyperlink{struct_encoder_a36dda2666e5436e608a494230ca9076b}{speed}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00041}\mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{00041}}\ \ \ \ \ int32\_t\ \mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00042}\mbox{\hyperlink{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8}{00042}}\ \ \ \ \ int32\_t\ \mbox{\hyperlink{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8}{dt}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00043}00043\ \}\mbox{\hyperlink{struct_encoder}{Encoder}};}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00050}00050\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{encoder__handler_8h_a2e99e34a584541bdb75991748fcfe787}{encoder\_read\_curr\_state}}(\mbox{\hyperlink{struct_encoder}{Encoder}}*\ encoder);}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00059}00059\ int32\_t\ \mbox{\hyperlink{encoder__handler_8h_a3ca7f0f7eece0d5d5697afd087eb7c82}{encoder\_calc\_speed}}(\mbox{\hyperlink{struct_encoder}{Encoder}}*\ encoder,int32\_t\ dx,\ int32\_t\ dt);}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00065}00065\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{encoder__handler_8h_a44bf467c45583a5b9aaa0ae50619101c}{zero}}(\mbox{\hyperlink{struct_encoder}{Encoder}}*\ encoder);}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00075}00075\ int32\_t\ \mbox{\hyperlink{encoder__handler_8h_a49a271d7ac63aab3145345029461a211}{delta}}(TIM\_HandleTypeDef*\ timer,\ uint32\_t\ initial,\ uint32\_t\ \textcolor{keyword}{final});}
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{encoder__handler_8h_source_l00077}00077\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ SRC\_ENCODER\_HANDLER\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

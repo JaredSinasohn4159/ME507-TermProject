@@ -1,0 +1,75 @@
+\doxysection{doxy\+\_\+core/\+Inc/pitch\+\_\+encoder\+\_\+handler.h File Reference}
+\hypertarget{pitch__encoder__handler_8h}{}\label{pitch__encoder__handler_8h}\index{doxy\_core/Inc/pitch\_encoder\_handler.h@{doxy\_core/Inc/pitch\_encoder\_handler.h}}
+{\ttfamily \#include "{}stm32\+L4xx\+\_\+hal.\+h"{}}\newline
+{\ttfamily \#include "{}encoder\+\_\+handler.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{struct_pitch_encoder}{Pitch\+Encoder}}
+\begin{DoxyCompactList}\small\item\em This class, in an object oriented sense, inherits the \doxylink{struct_encoder}{Encoder} class but specifically reads values from the pitch encoder to map them to a specific pitch. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{pitch__encoder__handler_8h_ae30c094e6767f017185358c645160595}{get\+\_\+pitch}} (\mbox{\hyperlink{struct_pitch_encoder}{Pitch\+Encoder}} \texorpdfstring{$\ast$}{*}p\+\_\+enc)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyDate}{Date}
+May 30, 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jared Sinasohn 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{pitch__encoder__handler_8h_source}{pitch\+\_\+encoder\+\_\+handler.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{pitch__encoder__handler_8h_ae30c094e6767f017185358c645160595}\label{pitch__encoder__handler_8h_ae30c094e6767f017185358c645160595} 
+\index{pitch\_encoder\_handler.h@{pitch\_encoder\_handler.h}!get\_pitch@{get\_pitch}}
+\index{get\_pitch@{get\_pitch}!pitch\_encoder\_handler.h@{pitch\_encoder\_handler.h}}
+\doxysubsubsection{\texorpdfstring{get\_pitch()}{get\_pitch()}}
+{\footnotesize\ttfamily uint32\+\_\+t get\+\_\+pitch (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_pitch_encoder}{Pitch\+Encoder}} \texorpdfstring{$\ast$}{*}}]{p\+\_\+enc }\end{DoxyParamCaption})}
+
+This function gets the current pitch based on the pitch selection knob 
+\begin{DoxyParams}{Parameters}
+{\em p\+\_\+enc} & The pitch encoder object to read from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the current pitch, a number 0-\/11 mapped through the chromatic notes from A-\/\+Ab 
+\end{DoxyReturn}
+read the current state of the encoder
+
+store the delta of the encoder
+
+add the delta to the pitch
+
+if the pitch hasn\textquotesingle{}t changed, just return the pitch
+
+we can treat the pitch as a number between 0 and 11, which can underflow and overflow. We can run a similar algorithm to the \doxylink{encoder__handler_8h_a49a271d7ac63aab3145345029461a211}{delta()} function in the encoder class to correct for this.
+
+Definition at line \mbox{\hyperlink{pitch__encoder__handler_8c_source_l00015}{15}} of file \mbox{\hyperlink{pitch__encoder__handler_8c_source}{pitch\+\_\+encoder\+\_\+handler.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{encoder__handler_8h_a2e99e34a584541bdb75991748fcfe787}{encoder\_read\_curr\_state}}((p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a4f4f9d7dc6695bed4a97c8cc643d26d3}{encoder}}));}
+\DoxyCodeLine{00019\ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a70d4fc7788f641b6913d1a8280206a9b}{delta}}\ =\ (int16\_t)(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a4f4f9d7dc6695bed4a97c8cc643d26d3}{encoder}}-\/>\mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}});}
+\DoxyCodeLine{00021\ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ +=\ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a70d4fc7788f641b6913d1a8280206a9b}{delta}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordflow}{if}(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a70d4fc7788f641b6913d1a8280206a9b}{delta}}\ ==\ 0)\{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}};}
+\DoxyCodeLine{00025\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{if}(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ <\ 0)\{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ +=\ 12;}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordflow}{if}(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ >=\ 12)\{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ -\/=\ 12;}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{return}\ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}};}
+\DoxyCodeLine{00034\ \}}
+
+\end{DoxyCode}

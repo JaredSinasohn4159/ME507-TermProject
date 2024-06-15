@@ -1,0 +1,180 @@
+\doxysection{doxy\+\_\+core/\+Inc/motor\+\_\+driver.h File Reference}
+\hypertarget{motor__driver_8h}{}\label{motor__driver_8h}\index{doxy\_core/Inc/motor\_driver.h@{doxy\_core/Inc/motor\_driver.h}}
+
+
+The header file for a generic DC motor driven from a standard h-\/bridge motor driver.  
+
+
+{\ttfamily \#include "{}stm32l4xx\+\_\+hal.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{struct_motor}{Motor}}
+\begin{DoxyCompactList}\small\item\em An implementation of a motor driver using a struct to emulate Object Oriented Programming. The motor has 4 parameters, timer which indicates the timer to be used to run the motor, channels, which indicates the channels to be used to run the motor, duty\+\_\+cycle, the duty cycle to run the motor at, and enable\+\_\+flag, which determines if the motor is allowed to run. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{motor__driver_8h_a79432d503882140b2011c6fcd9005669}{motor\+\_\+set\+\_\+duty\+\_\+cycle}} (\mbox{\hyperlink{struct_motor}{Motor}} \texorpdfstring{$\ast$}{*}motor, int32\+\_\+t doot)
+\item 
+void \mbox{\hyperlink{motor__driver_8h_a19a936200405c108263bf30178dd4655}{motor\+\_\+enable\+\_\+disable}} (\mbox{\hyperlink{struct_motor}{Motor}} \texorpdfstring{$\ast$}{*}motor, uint8\+\_\+t enable)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The header file for a generic DC motor driven from a standard h-\/bridge motor driver. 
+
+\begin{DoxyDate}{Date}
+Apr 25, 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jared Sinasohn 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{motor__driver_8h_source}{motor\+\_\+driver.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{motor__driver_8h_a19a936200405c108263bf30178dd4655}\label{motor__driver_8h_a19a936200405c108263bf30178dd4655} 
+\index{motor\_driver.h@{motor\_driver.h}!motor\_enable\_disable@{motor\_enable\_disable}}
+\index{motor\_enable\_disable@{motor\_enable\_disable}!motor\_driver.h@{motor\_driver.h}}
+\doxysubsubsection{\texorpdfstring{motor\_enable\_disable()}{motor\_enable\_disable()}}
+{\footnotesize\ttfamily void motor\+\_\+enable\+\_\+disable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_motor}{Motor}} \texorpdfstring{$\ast$}{*}}]{motor,  }\item[{uint8\+\_\+t}]{enable }\end{DoxyParamCaption})}
+
+Enables or disables motor based on user input
+
+
+\begin{DoxyParams}{Parameters}
+{\em motor,the} & \doxylink{struct_motor}{Motor} struct to act upon \\
+\hline
+{\em enable,the} & boolean of whether to enable or disable the motor with 1 being to enable and 0 being to disable. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8c_source_l00087}{87}} of file \mbox{\hyperlink{motor__driver_8c_source}{motor\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ if\ user\ wants\ to\ enable\ motor}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordflow}{if}(enable\ ==\ 1)\{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 1;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ retrieve\ ARR\ to\ set\ motor\ to\ brake\ mode}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ uint32\_t\ ARR\ =\ (uint32\_t)(motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Init.Period\ +\ 1);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ set\ the\ correct\ motor\ pair\ to\ brake\ mode.}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ ARR;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ ARR;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ ARR;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ ARR;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor's\ enable\ flag\ to\ 1}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 1;}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{//\ if\ user\ wants\ to\ disable\ motor}}
+\DoxyCodeLine{00109\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(enable\ ==\ 0)\{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 0;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ 0;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ 0;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ 0;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ 0;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor's\ enable\ flag\ to\ 0}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 0;}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \}}
+
+\end{DoxyCode}
+\Hypertarget{motor__driver_8h_a79432d503882140b2011c6fcd9005669}\label{motor__driver_8h_a79432d503882140b2011c6fcd9005669} 
+\index{motor\_driver.h@{motor\_driver.h}!motor\_set\_duty\_cycle@{motor\_set\_duty\_cycle}}
+\index{motor\_set\_duty\_cycle@{motor\_set\_duty\_cycle}!motor\_driver.h@{motor\_driver.h}}
+\doxysubsubsection{\texorpdfstring{motor\_set\_duty\_cycle()}{motor\_set\_duty\_cycle()}}
+{\footnotesize\ttfamily void motor\+\_\+set\+\_\+duty\+\_\+cycle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_motor}{Motor}} \texorpdfstring{$\ast$}{*}}]{motor,  }\item[{int32\+\_\+t}]{doot }\end{DoxyParamCaption})}
+
+This function implements the duty cycle setting of the motor. It takes in the motor struct and a duty cycle from -\/100 to 100 (though the function saturates values above and below these values).
+
+
+\begin{DoxyParams}{Parameters}
+{\em motor,the} & \doxylink{struct_motor}{Motor} struct to be operated on. \\
+\hline
+{\em doot,the} & duty cycle to be set to. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8c_source_l00021}{21}} of file \mbox{\hyperlink{motor__driver_8c_source}{motor\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_ada18bd121f999df49f9985ab76ac0c9c}{duty\_cycle}}\ =\ doot;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ First,\ check\ if\ the\ motor\ is\ disabled}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ !=\ 1)\{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ the\ enable\ flag\ isn't\ set\ exit\ the\ function\ and\ do\ nothing.}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ we\ are\ also\ using\ !=\ 1\ so\ if\ there\ is\ a\ stray\ value\ in\ memory,}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ motor\ doesn't\ accidentally\ enable.}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Next,\ saturate\ the\ duty\ cycle\ just\ in\ case.}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordflow}{if}(doot\ <\ -\/100)\{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ doot\ =\ -\/100;}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{if}(doot\ >\ 100)\{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ doot\ =\ 100;}
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ We\ need\ to\ get\ the\ auto\ reload\ value\ for\ the\ timer\ we\ are\ using}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ signed\ value\ so\ we\ don't\ run\ into\ sign\ issues\ later}}
+\DoxyCodeLine{00041\ \ \ \ \ int32\_t\ ARR\ =\ (int32\_t)(motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Init.Period\ +\ 1);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ Now\ calculate\ the\ duty\ cycle\ in\ terms\ of\ the\ CCR\ value}}
+\DoxyCodeLine{00044\ \ \ \ \ doot\ =\ doot*ARR/100;\ \ \textcolor{comment}{//\ multiply\ first\ so\ we\ don't\ lose\ data}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ now\ we\ need\ to\ set\ the\ motors\ to\ the\ correct\ duty\ cycles}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ Forwards\ will\ be\ channels\ 1\ and\ 3\ for\ motors\ 1\ and\ 2\ respectively}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ Backwards\ will\ be\ channels\ 2\ and\ 4\ for\ motors\ 1\ and\ 2\ respectively}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{//\ the\ below\ CCR's\ are\ based\ on\ the\ logic\ table\ of\ the\ toshiba,\ setting\ motor.}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ to\ brake\ mode}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ if\ duty\ cycle\ is\ <0}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (doot\ <\ 0)\{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ if\ it\ is\ the\ first\ or\ second\ motor.}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ ARR;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ ARR\ +\ doot;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ ARR;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ ARR\ +\ doot;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ neither\ return}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ if\ duty\ cycle\ >=0}}
+\DoxyCodeLine{00067\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ ARR\ -\/\ doot;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ ARR;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ ARR\ -\/\ doot;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ ARR;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ \}}
+
+\end{DoxyCode}

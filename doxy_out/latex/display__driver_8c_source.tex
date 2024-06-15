@@ -1,0 +1,61 @@
+\doxysection{display\+\_\+driver.\+c}
+\hypertarget{display__driver_8c_source}{}\label{display__driver_8c_source}\index{doxy\_core/Src/display\_driver.c@{doxy\_core/Src/display\_driver.c}}
+\mbox{\hyperlink{display__driver_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{display__driver_8h}{display\_driver.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00013}\mbox{\hyperlink{display__driver_8c_a73626ce1dbc66555b50f63d8a88007c4}{00013}}\ uint16\_t\ \mbox{\hyperlink{display__driver_8c_a73626ce1dbc66555b50f63d8a88007c4}{note\_addresses}}[12]\ =\ \{0b1101100001111000,0b1101101101110101,0b1101101101110100,0b1101101100000000,0b1110001111001001,0b1110001111001000,0b1101101100110001,0b1101101100110000,0b1101000000110000,0b1101101101010001,0b1101101101010000,0b1101100001111001\};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00018}\mbox{\hyperlink{display__driver_8c_a1cbfb6b977793f4004726ec4891d69b0}{00018}}\ uint16\_t\ \mbox{\hyperlink{display__driver_8c_a1cbfb6b977793f4004726ec4891d69b0}{disp\_addr}}\ =\ 0b11000001;}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00019}\mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{00019}}\ uint8\_t\ \mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{Pitch\_Message}}[]\ =\ \textcolor{stringliteral}{"{}Current\ Pitch:\ "{}};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00020}\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{00020}}\ uint8\_t\ \mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}}[50]\ =\ \{0\};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00028}\mbox{\hyperlink{display__driver_8h_a1475cf65795074c2b448a950ecd6e1d6}{00028}}\ uint8\_t\ \mbox{\hyperlink{display__driver_8c_a1475cf65795074c2b448a950ecd6e1d6}{display\_note}}(\mbox{\hyperlink{struct_display}{Display}}*\ disp,\ uint8\_t\ note)\{}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{if}(disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}}\ ==\ note)\{}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00031}00031\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00032}00032\ \ \ \ \ disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}}\ =\ note;}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{switch}(disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}})\{}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}A\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Bb\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}B\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}C\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 4:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Db\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 5:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}D\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 6:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Eb\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 7:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}E\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 8:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}F\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 9:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Gb\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 10:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}G\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 11:}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Ab\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ HAL\_UART\_Transmit(disp-\/>\mbox{\hyperlink{struct_display_a365f350d6932cf3baad88940ae31e630}{huart}},\ \mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{Pitch\_Message}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{Pitch\_Message}}),\ 10000);}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ HAL\_UART\_Transmit(disp-\/>\mbox{\hyperlink{struct_display_a365f350d6932cf3baad88940ae31e630}{huart}},\ \mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}}),\ 10000);}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00073}00073\ \ \ \ \ \textcolor{keywordflow}{return}\ disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}};}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00074}00074\ \}}
+\DoxyCodeLine{\Hypertarget{display__driver_8c_source_l00075}00075\ }
+
+\end{DoxyCode}

@@ -1,0 +1,169 @@
+\doxysection{doxy\+\_\+core/\+Src/display\+\_\+driver.c File Reference}
+\hypertarget{display__driver_8c}{}\label{display__driver_8c}\index{doxy\_core/Src/display\_driver.c@{doxy\_core/Src/display\_driver.c}}
+
+
+Implements the methods from the \doxylink{struct_display}{Display} class.  
+
+
+{\ttfamily \#include "{}display\+\_\+driver.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{display__driver_8c_a1475cf65795074c2b448a950ecd6e1d6}{display\+\_\+note}} (\mbox{\hyperlink{struct_display}{Display}} \texorpdfstring{$\ast$}{*}disp, uint8\+\_\+t note)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{display__driver_8c_a73626ce1dbc66555b50f63d8a88007c4}{note\+\_\+addresses}} \mbox{[}12\mbox{]} = \{0b1101100001111000,0b1101101101110101,0b1101101101110100,0b1101101100000000,0b1110001111001001,0b1110001111001000,0b1101101100110001,0b1101101100110000,0b1101000000110000,0b1101101101010001,0b1101101101010000,0b1101100001111001\}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{display__driver_8c_a1cbfb6b977793f4004726ec4891d69b0}{disp\+\_\+addr}} = 0b11000001
+\item 
+uint8\+\_\+t \mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{Pitch\+\_\+\+Message}} \mbox{[}$\,$\mbox{]} = "{}Current Pitch\+: "{}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\+\_\+\+Buffer}} \mbox{[}50\mbox{]} = \{0\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements the methods from the \doxylink{struct_display}{Display} class. 
+
+\begin{DoxyDate}{Date}
+Jun 9, 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jared Sinasohn 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{display__driver_8c_source}{display\+\_\+driver.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{display__driver_8c_a1475cf65795074c2b448a950ecd6e1d6}\label{display__driver_8c_a1475cf65795074c2b448a950ecd6e1d6} 
+\index{display\_driver.c@{display\_driver.c}!display\_note@{display\_note}}
+\index{display\_note@{display\_note}!display\_driver.c@{display\_driver.c}}
+\doxysubsubsection{\texorpdfstring{display\_note()}{display\_note()}}
+{\footnotesize\ttfamily uint8\+\_\+t display\+\_\+note (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_display}{Display}} \texorpdfstring{$\ast$}{*}}]{disp,  }\item[{uint8\+\_\+t}]{note }\end{DoxyParamCaption})}
+
+This function displays the current note on the display. 
+\begin{DoxyParams}{Parameters}
+{\em disp} & The display instance \\
+\hline
+{\em note} & The note to be displayed from 0-\/11. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+curr\+\_\+note The note that is displayed. 
+\end{DoxyReturn}
+\begin{DoxyAttention}{Attention}
+The Current function uses uart to display the current note, but at the end would use i2c to the driver. 
+\end{DoxyAttention}
+
+
+Definition at line \mbox{\hyperlink{display__driver_8c_source_l00028}{28}} of file \mbox{\hyperlink{display__driver_8c_source}{display\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordflow}{if}(disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}}\ ==\ note)\{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}};}
+\DoxyCodeLine{00031\ \ \ \ \ \}}
+\DoxyCodeLine{00032\ \ \ \ \ disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}}\ =\ note;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{switch}(disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}})\{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}A\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Bb\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}B\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}C\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 4:}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Db\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 5:}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}D\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 6:}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Eb\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 7:}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}E\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 8:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}F\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 9:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Gb\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 10:}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}G\ \ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 11:}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{stringliteral}{"{}Ab\ \(\backslash\)r\(\backslash\)n"{}});}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ HAL\_UART\_Transmit(disp-\/>\mbox{\hyperlink{struct_display_a365f350d6932cf3baad88940ae31e630}{huart}},\ \mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{Pitch\_Message}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{display__driver_8c_a1db133833cfb22516cc60de21a505a69}{Pitch\_Message}}),\ 10000);}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ HAL\_UART\_Transmit(disp-\/>\mbox{\hyperlink{struct_display_a365f350d6932cf3baad88940ae31e630}{huart}},\ \mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}{Pitch\_Buffer}}),\ 10000);}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordflow}{return}\ disp-\/>\mbox{\hyperlink{struct_display_ab062150c2c1452d96d85005c7b6efebf}{curr\_note}};}
+\DoxyCodeLine{00074\ \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{display__driver_8c_a1cbfb6b977793f4004726ec4891d69b0}\label{display__driver_8c_a1cbfb6b977793f4004726ec4891d69b0} 
+\index{display\_driver.c@{display\_driver.c}!disp\_addr@{disp\_addr}}
+\index{disp\_addr@{disp\_addr}!display\_driver.c@{display\_driver.c}}
+\doxysubsubsection{\texorpdfstring{disp\_addr}{disp\_addr}}
+{\footnotesize\ttfamily disp\+\_\+addr = 0b11000001}
+
+The address of the display driver on the i2c bus 
+
+Definition at line \mbox{\hyperlink{display__driver_8c_source_l00018}{18}} of file \mbox{\hyperlink{display__driver_8c_source}{display\+\_\+driver.\+c}}.
+
+\Hypertarget{display__driver_8c_a73626ce1dbc66555b50f63d8a88007c4}\label{display__driver_8c_a73626ce1dbc66555b50f63d8a88007c4} 
+\index{display\_driver.c@{display\_driver.c}!note\_addresses@{note\_addresses}}
+\index{note\_addresses@{note\_addresses}!display\_driver.c@{display\_driver.c}}
+\doxysubsubsection{\texorpdfstring{note\_addresses}{note\_addresses}}
+{\footnotesize\ttfamily note\+\_\+addresses = \{0b1101100001111000,0b1101101101110101,0b1101101101110100,0b1101101100000000,0b1110001111001001,0b1110001111001000,0b1101101100110001,0b1101101100110000,0b1101000000110000,0b1101101101010001,0b1101101101010000,0b1101100001111001\}}
+
+The values used to light up the 16 segment display, each position in the list corresponds to a note, each bit in the 16 bit numbers corresponds to a segment in the display 
+
+Definition at line \mbox{\hyperlink{display__driver_8c_source_l00013}{13}} of file \mbox{\hyperlink{display__driver_8c_source}{display\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00013\ \{0b1101100001111000,0b1101101101110101,0b1101101101110100,0b1101101100000000,0b1110001111001001,0b1110001111001000,0b1101101100110001,0b1101101100110000,0b1101000000110000,0b1101101101010001,0b1101101101010000,0b1101100001111001\};}
+
+\end{DoxyCode}
+\Hypertarget{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb}\label{display__driver_8c_ae3ecb180327ce904ecf11897050f44eb} 
+\index{display\_driver.c@{display\_driver.c}!Pitch\_Buffer@{Pitch\_Buffer}}
+\index{Pitch\_Buffer@{Pitch\_Buffer}!display\_driver.c@{display\_driver.c}}
+\doxysubsubsection{\texorpdfstring{Pitch\_Buffer}{Pitch\_Buffer}}
+{\footnotesize\ttfamily uint8\+\_\+t Pitch\+\_\+\+Buffer\mbox{[}50\mbox{]} = \{0\}}
+
+
+
+Definition at line \mbox{\hyperlink{display__driver_8c_source_l00020}{20}} of file \mbox{\hyperlink{display__driver_8c_source}{display\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00020\ \{0\};}
+
+\end{DoxyCode}
+\Hypertarget{display__driver_8c_a1db133833cfb22516cc60de21a505a69}\label{display__driver_8c_a1db133833cfb22516cc60de21a505a69} 
+\index{display\_driver.c@{display\_driver.c}!Pitch\_Message@{Pitch\_Message}}
+\index{Pitch\_Message@{Pitch\_Message}!display\_driver.c@{display\_driver.c}}
+\doxysubsubsection{\texorpdfstring{Pitch\_Message}{Pitch\_Message}}
+{\footnotesize\ttfamily uint8\+\_\+t Pitch\+\_\+\+Message\mbox{[}$\,$\mbox{]} = "{}Current Pitch\+: "{}}
+
+
+
+Definition at line \mbox{\hyperlink{display__driver_8c_source_l00019}{19}} of file \mbox{\hyperlink{display__driver_8c_source}{display\+\_\+driver.\+c}}.
+

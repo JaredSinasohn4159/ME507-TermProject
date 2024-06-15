@@ -1,0 +1,160 @@
+\doxysection{RC\+\_\+\+Controller Class Reference}
+\hypertarget{struct_r_c___controller}{}\label{struct_r_c___controller}\index{RC\_Controller@{RC\_Controller}}
+
+
+An implementation of an RC controller that sends pulse widths from its two control axes--a trigger and a wheel--through infrared. The motor has parameters for the timer used for the input capture of the pulse widths, the pulse widths sent by the controller for each of the axes, the values of time of the rising edges and falling axes for each axis, and flags that indicate a falling edge has been detected and therefore a period should be caulculated.  
+
+
+
+
+{\ttfamily \#include $<$controller\+\_\+driver.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+TIM\+\_\+\+Handle\+Type\+Def \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_r_c___controller_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071}{period1}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc}{period2}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc}{re1}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e}{re2}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9}{fe1}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767}{fe2}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{struct_r_c___controller_a1beedcb79cbaf43ce4cd67b1cb65254b}{fe\+\_\+flag1}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{struct_r_c___controller_a79c94209d2c33be26296441191b97d0f}{fe\+\_\+flag2}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An implementation of an RC controller that sends pulse widths from its two control axes--a trigger and a wheel--through infrared. The motor has parameters for the timer used for the input capture of the pulse widths, the pulse widths sent by the controller for each of the axes, the values of time of the rising edges and falling axes for each axis, and flags that indicate a falling edge has been detected and therefore a period should be caulculated. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer} & The microcontroller timer to use to run the input capture of the RC controller. This is a timer pointer. The timer should be configured such that each count of the timer is read in microseconds, which in this case requires a prescaler of 79 and an auto-\/reload of 65535. \\
+\hline
+{\em period1} & The pulse width of the first axis \\
+\hline
+{\em period2} & The pulse width of the second axis \\
+\hline
+{\em re1} & Timer value on the rising edge captured on the first axis \\
+\hline
+{\em re2} & Timer value on the rising edge captured on the second axis \\
+\hline
+{\em fe1} & Timer value on the falling edge captured on the first axis \\
+\hline
+{\em fe2} & Timer value on the falling edge captured on the second axis \\
+\hline
+{\em fe\+\_\+flag1} & Flag that is set by the input capture callback function to indicate a falling edge has been detected for the first axis. \\
+\hline
+{\em fe\+\_\+flag2} & Flag that is set by the input capture callback function to indicate a falling edge has been detected for the first axis. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00033}{33}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9}\label{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9} 
+\index{RC\_Controller@{RC\_Controller}!fe1@{fe1}}
+\index{fe1@{fe1}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{fe1}{fe1}}
+{\footnotesize\ttfamily uint32\+\_\+t fe1}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00039}{39}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767}\label{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767} 
+\index{RC\_Controller@{RC\_Controller}!fe2@{fe2}}
+\index{fe2@{fe2}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{fe2}{fe2}}
+{\footnotesize\ttfamily uint32\+\_\+t fe2}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00040}{40}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_a1beedcb79cbaf43ce4cd67b1cb65254b}\label{struct_r_c___controller_a1beedcb79cbaf43ce4cd67b1cb65254b} 
+\index{RC\_Controller@{RC\_Controller}!fe\_flag1@{fe\_flag1}}
+\index{fe\_flag1@{fe\_flag1}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{fe\_flag1}{fe\_flag1}}
+{\footnotesize\ttfamily uint8\+\_\+t fe\+\_\+flag1}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00041}{41}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_a79c94209d2c33be26296441191b97d0f}\label{struct_r_c___controller_a79c94209d2c33be26296441191b97d0f} 
+\index{RC\_Controller@{RC\_Controller}!fe\_flag2@{fe\_flag2}}
+\index{fe\_flag2@{fe\_flag2}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{fe\_flag2}{fe\_flag2}}
+{\footnotesize\ttfamily uint8\+\_\+t fe\+\_\+flag2}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00042}{42}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071}\label{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071} 
+\index{RC\_Controller@{RC\_Controller}!period1@{period1}}
+\index{period1@{period1}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{period1}{period1}}
+{\footnotesize\ttfamily uint32\+\_\+t period1}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00035}{35}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc}\label{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc} 
+\index{RC\_Controller@{RC\_Controller}!period2@{period2}}
+\index{period2@{period2}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{period2}{period2}}
+{\footnotesize\ttfamily uint32\+\_\+t period2}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00036}{36}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc}\label{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc} 
+\index{RC\_Controller@{RC\_Controller}!re1@{re1}}
+\index{re1@{re1}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{re1}{re1}}
+{\footnotesize\ttfamily uint32\+\_\+t re1}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00037}{37}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e}\label{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e} 
+\index{RC\_Controller@{RC\_Controller}!re2@{re2}}
+\index{re2@{re2}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{re2}{re2}}
+{\footnotesize\ttfamily uint32\+\_\+t re2}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00038}{38}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_r_c___controller_a30b15aedcc086ca7abb69f7ac012ce64}\label{struct_r_c___controller_a30b15aedcc086ca7abb69f7ac012ce64} 
+\index{RC\_Controller@{RC\_Controller}!timer@{timer}}
+\index{timer@{timer}!RC\_Controller@{RC\_Controller}}
+\doxysubsubsection{\texorpdfstring{timer}{timer}}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def\texorpdfstring{$\ast$}{*} timer}
+
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8h_source_l00034}{34}} of file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+doxy\+\_\+core/\+Inc/\mbox{\hyperlink{controller__driver_8h}{controller\+\_\+driver.\+h}}\end{DoxyCompactItemize}

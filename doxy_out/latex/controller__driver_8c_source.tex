@@ -1,0 +1,21 @@
+\doxysection{controller\+\_\+driver.\+c}
+\hypertarget{controller__driver_8c_source}{}\label{controller__driver_8c_source}\index{doxy\_core/Src/controller\_driver.c@{doxy\_core/Src/controller\_driver.c}}
+\mbox{\hyperlink{controller__driver_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{controller__driver_8h}{controller\_driver.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00015}\mbox{\hyperlink{controller__driver_8h_ad113cc6d4c1a8f8c7c761d0c4dc1c272}{00015}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{controller__driver_8c_ad113cc6d4c1a8f8c7c761d0c4dc1c272}{controller\_driver\_calc\_per1}}(\mbox{\hyperlink{struct_r_c___controller}{RC\_Controller}}*\ controller)\{}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00016}00016\ \ \ \ \ uint32\_t\ per1\ =\ controller-\/>\mbox{\hyperlink{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9}{fe1}}-\/controller-\/>\mbox{\hyperlink{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc}{re1}};}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00017}00017\ \ \ \ \ \textcolor{keywordflow}{if}(per1\ <\ 2050\ \&\&\ per1\ >\ 950)\{}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00018}00018\ \ \ \ \ \ \ \ \ controller-\/>\mbox{\hyperlink{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071}{period1}}\ =\ per1;}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00019}00019\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00020}00020\ \}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00026}\mbox{\hyperlink{controller__driver_8h_a7a3aa513c19747873ac798918a29b2ef}{00026}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{controller__driver_8c_a7a3aa513c19747873ac798918a29b2ef}{controller\_driver\_calc\_per2}}(\mbox{\hyperlink{struct_r_c___controller}{RC\_Controller}}*\ controller)\{}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00027}00027\ \ \ \ \ uint32\_t\ per2\ =\ controller-\/>\mbox{\hyperlink{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767}{fe2}}-\/controller-\/>\mbox{\hyperlink{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e}{re2}};}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(per2\ <\ 2050\ \&\&\ per2\ >\ 950)\{}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ controller-\/>\mbox{\hyperlink{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc}{period2}}\ =\ per2;}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8c_source_l00031}00031\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,26 @@
+\doxysection{motor\+\_\+driver.\+h}
+\hypertarget{motor__driver_8h_source}{}\label{motor__driver_8h_source}\index{doxy\_core/Inc/motor\_driver.h@{doxy\_core/Inc/motor\_driver.h}}
+\mbox{\hyperlink{motor__driver_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00008}00008\ \textcolor{preprocessor}{\#ifndef\ SRC\_MOTOR\_DRIVER\_H\_}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00009}00009\ \textcolor{preprocessor}{\#define\ SRC\_MOTOR\_DRIVER\_H\_}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00011}00011\ \textcolor{comment}{//include\ hal\ library}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}stm32l4xx\_hal.h"{}}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00029}\mbox{\hyperlink{struct_motor}{00029}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00030}\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{00030}}\ \ \ \ \ TIM\_HandleTypeDef*\ \mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}};\ \textcolor{comment}{//\ Handle\ to\ the\ HAL\ timer\ object}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00031}\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{00031}}\ \ \ \ \ uint8\_t\ \ \mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}};\ \textcolor{comment}{//\ which\ channels\ to\ use.\ \ using\ channels\ 1-\/4\ so\ 1\ corresponds\ to\ 1\ and\ 2\ and\ 2\ corresponds\ to\ 3\ and\ 4}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00032}\mbox{\hyperlink{struct_motor_ada18bd121f999df49f9985ab76ac0c9c}{00032}}\ \ \ \ \ int32\_t\ \ \mbox{\hyperlink{struct_motor_ada18bd121f999df49f9985ab76ac0c9c}{duty\_cycle}};\ \textcolor{comment}{//\ duty\ cycle\ of\ the\ motor\ from\ -\/ARR\ to\ ARR,\ which\ is\ 1000}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00033}\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{00033}}\ \ \ \ \ uint8\_t\ \ \mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}};\ \textcolor{comment}{//\ flag\ that\ enables\ the\ motor}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00034}00034\ \}\ \mbox{\hyperlink{struct_motor}{Motor}};}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00044}00044\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{motor__driver_8h_a79432d503882140b2011c6fcd9005669}{motor\_set\_duty\_cycle}}(\mbox{\hyperlink{struct_motor}{Motor}}*\ motor,\ int32\_t\ doot);}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00053}00053\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{motor__driver_8h_a19a936200405c108263bf30178dd4655}{motor\_enable\_disable}}(\mbox{\hyperlink{struct_motor}{Motor}}*\ motor,\ uint8\_t\ enable);}
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8h_source_l00056}00056\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ SRC\_MOTOR\_DRIVER\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

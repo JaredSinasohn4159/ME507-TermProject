@@ -1,0 +1,106 @@
+\doxysection{doxy\+\_\+core/\+Inc/controller\+\_\+driver.h File Reference}
+\hypertarget{controller__driver_8h}{}\label{controller__driver_8h}\index{doxy\_core/Inc/controller\_driver.h@{doxy\_core/Inc/controller\_driver.h}}
+
+
+A pseudo-\/object-\/oriented structure for implementing the calculation of a pulse-\/width read from a two-\/channel rc controller.  
+
+
+{\ttfamily \#include "{}stm32l4xx\+\_\+hal.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{struct_r_c___controller}{RC\+\_\+\+Controller}}
+\begin{DoxyCompactList}\small\item\em An implementation of an RC controller that sends pulse widths from its two control axes--a trigger and a wheel--through infrared. The motor has parameters for the timer used for the input capture of the pulse widths, the pulse widths sent by the controller for each of the axes, the values of time of the rising edges and falling axes for each axis, and flags that indicate a falling edge has been detected and therefore a period should be caulculated. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{controller__driver_8h_ad113cc6d4c1a8f8c7c761d0c4dc1c272}{controller\+\_\+driver\+\_\+calc\+\_\+per1}} (\mbox{\hyperlink{struct_r_c___controller}{RC\+\_\+\+Controller}} \texorpdfstring{$\ast$}{*}controller)
+\item 
+void \mbox{\hyperlink{controller__driver_8h_a7a3aa513c19747873ac798918a29b2ef}{controller\+\_\+driver\+\_\+calc\+\_\+per2}} (\mbox{\hyperlink{struct_r_c___controller}{RC\+\_\+\+Controller}} \texorpdfstring{$\ast$}{*}controller)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A pseudo-\/object-\/oriented structure for implementing the calculation of a pulse-\/width read from a two-\/channel rc controller. 
+
+\begin{DoxyDate}{Date}
+May 9, 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jared Sinasohn 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{controller__driver_8h_source}{controller\+\_\+driver.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{controller__driver_8h_ad113cc6d4c1a8f8c7c761d0c4dc1c272}\label{controller__driver_8h_ad113cc6d4c1a8f8c7c761d0c4dc1c272} 
+\index{controller\_driver.h@{controller\_driver.h}!controller\_driver\_calc\_per1@{controller\_driver\_calc\_per1}}
+\index{controller\_driver\_calc\_per1@{controller\_driver\_calc\_per1}!controller\_driver.h@{controller\_driver.h}}
+\doxysubsubsection{\texorpdfstring{controller\_driver\_calc\_per1()}{controller\_driver\_calc\_per1()}}
+{\footnotesize\ttfamily void controller\+\_\+driver\+\_\+calc\+\_\+per1 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_r_c___controller}{RC\+\_\+\+Controller}} \texorpdfstring{$\ast$}{*}}]{controller }\end{DoxyParamCaption})}
+
+Calculates the pulse width sent by the first axis
+
+
+\begin{DoxyParams}{Parameters}
+{\em controller,the} & RC Controller instance to caculate and operate on\\
+\hline
+\end{DoxyParams}
+Calculates the pulse width sent by the first axis. This number, if the timer is set up correctly, should be a number
+
+
+\begin{DoxyParams}{Parameters}
+{\em controller,the} & RC Controller instance to caculate and operate on \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8c_source_l00015}{15}} of file \mbox{\hyperlink{controller__driver_8c_source}{controller\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00016\ \ \ \ \ uint32\_t\ per1\ =\ controller-\/>\mbox{\hyperlink{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9}{fe1}}-\/controller-\/>\mbox{\hyperlink{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc}{re1}};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordflow}{if}(per1\ <\ 2050\ \&\&\ per1\ >\ 950)\{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ controller-\/>\mbox{\hyperlink{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071}{period1}}\ =\ per1;}
+\DoxyCodeLine{00019\ \ \ \ \ \}}
+\DoxyCodeLine{00020\ \}}
+
+\end{DoxyCode}
+\Hypertarget{controller__driver_8h_a7a3aa513c19747873ac798918a29b2ef}\label{controller__driver_8h_a7a3aa513c19747873ac798918a29b2ef} 
+\index{controller\_driver.h@{controller\_driver.h}!controller\_driver\_calc\_per2@{controller\_driver\_calc\_per2}}
+\index{controller\_driver\_calc\_per2@{controller\_driver\_calc\_per2}!controller\_driver.h@{controller\_driver.h}}
+\doxysubsubsection{\texorpdfstring{controller\_driver\_calc\_per2()}{controller\_driver\_calc\_per2()}}
+{\footnotesize\ttfamily void controller\+\_\+driver\+\_\+calc\+\_\+per2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_r_c___controller}{RC\+\_\+\+Controller}} \texorpdfstring{$\ast$}{*}}]{controller }\end{DoxyParamCaption})}
+
+Calculates the pulse width sent by the second axis
+
+
+\begin{DoxyParams}{Parameters}
+{\em controller,the} & RC Controller instance to caculate and operate on\\
+\hline
+\end{DoxyParams}
+Calculates the pulse width sent by the first axis. This number, if the timer is set up correctly, should be a number
+
+
+\begin{DoxyParams}{Parameters}
+{\em controller,the} & RC Controller instance to caculate and operate on \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{controller__driver_8c_source_l00026}{26}} of file \mbox{\hyperlink{controller__driver_8c_source}{controller\+\_\+driver.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ uint32\_t\ per2\ =\ controller-\/>\mbox{\hyperlink{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767}{fe2}}-\/controller-\/>\mbox{\hyperlink{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e}{re2}};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(per2\ <\ 2050\ \&\&\ per2\ >\ 950)\{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ controller-\/>\mbox{\hyperlink{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc}{period2}}\ =\ per2;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00031\ \}}
+
+\end{DoxyCode}

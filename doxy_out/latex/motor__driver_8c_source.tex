@@ -1,0 +1,106 @@
+\doxysection{motor\+\_\+driver.\+c}
+\hypertarget{motor__driver_8c_source}{}\label{motor__driver_8c_source}\index{doxy\_core/Src/motor\_driver.c@{doxy\_core/Src/motor\_driver.c}}
+\mbox{\hyperlink{motor__driver_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{motor__driver_8h}{motor\_driver.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00021}\mbox{\hyperlink{motor__driver_8h_a79432d503882140b2011c6fcd9005669}{00021}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{motor__driver_8c_a79432d503882140b2011c6fcd9005669}{motor\_set\_duty\_cycle}}(\mbox{\hyperlink{struct_motor}{Motor}}*\ motor,\ int32\_t\ doot)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00022}00022\ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_ada18bd121f999df49f9985ab76ac0c9c}{duty\_cycle}}\ =\ doot;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//\ First,\ check\ if\ the\ motor\ is\ disabled}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00024}00024\ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ !=\ 1)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00025}00025\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ the\ enable\ flag\ isn't\ set\ exit\ the\ function\ and\ do\ nothing.}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ we\ are\ also\ using\ !=\ 1\ so\ if\ there\ is\ a\ stray\ value\ in\ memory,}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ motor\ doesn't\ accidentally\ enable.}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00029}00029\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00031}00031\ \ \ \ \ \textcolor{comment}{//\ Next,\ saturate\ the\ duty\ cycle\ just\ in\ case.}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00032}00032\ \ \ \ \ \textcolor{keywordflow}{if}(doot\ <\ -\/100)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00033}00033\ \ \ \ \ \ \ \ \ doot\ =\ -\/100;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00034}00034\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00035}00035\ \ \ \ \ \textcolor{keywordflow}{if}(doot\ >\ 100)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00036}00036\ \ \ \ \ \ \ \ \ doot\ =\ 100;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00037}00037\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00039}00039\ \ \ \ \ \textcolor{comment}{//\ We\ need\ to\ get\ the\ auto\ reload\ value\ for\ the\ timer\ we\ are\ using}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00040}00040\ \ \ \ \ \textcolor{comment}{//\ signed\ value\ so\ we\ don't\ run\ into\ sign\ issues\ later}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00041}00041\ \ \ \ \ int32\_t\ ARR\ =\ (int32\_t)(motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Init.Period\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00043}00043\ \ \ \ \ \textcolor{comment}{//\ Now\ calculate\ the\ duty\ cycle\ in\ terms\ of\ the\ CCR\ value}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00044}00044\ \ \ \ \ doot\ =\ doot*ARR/100;\ \ \textcolor{comment}{//\ multiply\ first\ so\ we\ don't\ lose\ data}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00046}00046\ \ \ \ \ \textcolor{comment}{//\ now\ we\ need\ to\ set\ the\ motors\ to\ the\ correct\ duty\ cycles}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00047}00047\ \ \ \ \ \textcolor{comment}{//\ Forwards\ will\ be\ channels\ 1\ and\ 3\ for\ motors\ 1\ and\ 2\ respectively}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00048}00048\ \ \ \ \ \textcolor{comment}{//\ Backwards\ will\ be\ channels\ 2\ and\ 4\ for\ motors\ 1\ and\ 2\ respectively}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ the\ below\ CCR's\ are\ based\ on\ the\ logic\ table\ of\ the\ toshiba,\ setting\ motor.}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00052}00052\ \ \ \ \ \textcolor{comment}{//\ to\ brake\ mode}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//\ if\ duty\ cycle\ is\ <0}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (doot\ <\ 0)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ if\ it\ is\ the\ first\ or\ second\ motor.}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ ARR\ +\ doot;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ ARR\ +\ doot;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ neither\ return}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00065}00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00066}00066\ \ \ \ \ \textcolor{comment}{//\ if\ duty\ cycle\ >=0}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00067}00067\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ ARR\ -\/\ doot;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ ARR\ -\/\ doot;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00074}00074\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00076}00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00077}00077\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00078}00078\ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00087}\mbox{\hyperlink{motor__driver_8h_a19a936200405c108263bf30178dd4655}{00087}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{motor__driver_8c_a19a936200405c108263bf30178dd4655}{motor\_enable\_disable}}(\mbox{\hyperlink{struct_motor}{Motor}}*\ motor,\ uint8\_t\ enable)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00088}00088\ \ \ \ \ \textcolor{comment}{//\ if\ user\ wants\ to\ enable\ motor}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00089}00089\ \ \ \ \ \textcolor{keywordflow}{if}(enable\ ==\ 1)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00090}00090\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ retrieve\ ARR\ to\ set\ motor\ to\ brake\ mode}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ uint32\_t\ ARR\ =\ (uint32\_t)(motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Init.Period\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ set\ the\ correct\ motor\ pair\ to\ brake\ mode.}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00098}00098\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ ARR;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00103}00103\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor's\ enable\ flag\ to\ 1}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00106}00106\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00108}00108\ \ \ \ \ \textcolor{comment}{//\ if\ user\ wants\ to\ disable\ motor}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00109}00109\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(enable\ ==\ 0)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00110}00110\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00111}00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 1)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR1\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR2\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(motor-\/>\mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}\ ==\ 2)\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR3\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}-\/>Instance-\/>CCR4\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ motor's\ enable\ flag\ to\ 0}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ motor-\/>\mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\_flag}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00123}00123\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{motor__driver_8c_source_l00124}00124\ \}}
+
+\end{DoxyCode}

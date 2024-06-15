@@ -1,0 +1,180 @@
+\doxysection{Encoder Class Reference}
+\hypertarget{struct_encoder}{}\label{struct_encoder}\index{Encoder@{Encoder}}
+
+
+A generic implementation of a quadrature encoder that tracks the position of the encoder in counts and the speed the encoder is traveling at in counts per second.  
+
+
+
+
+{\ttfamily \#include $<$encoder\+\_\+handler.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+TIM\+\_\+\+Handle\+Type\+Def \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}
+\item 
+TIM\+\_\+\+Handle\+Type\+Def \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}{timing\+\_\+timer}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}{prev\+\_\+count}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}{curr\+\_\+count}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}{prev\+\_\+time}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}{curr\+\_\+time}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}{pos}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_encoder_a36dda2666e5436e608a494230ca9076b}{speed}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8}{dt}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A generic implementation of a quadrature encoder that tracks the position of the encoder in counts and the speed the encoder is traveling at in counts per second. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer} & The timer the encoder channels are on. \\
+\hline
+{\em timing\+\_\+timer} & The timer that is used to track time in order to calculate speed accurately. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+The timing\+\_\+timer must be configures such that it counts values in microseconds 
+\end{DoxyAttention}
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+\_\+count} & The previous count timer read. \\
+\hline
+{\em curr\+\_\+count} & The current count timer reads. \\
+\hline
+{\em prev\+\_\+time} & The previous count timing\+\_\+timer read. \\
+\hline
+{\em curr\+\_\+time} & The current count timing\+\_\+timer reads. \\
+\hline
+{\em pos} & The position of the encoder in counts. \\
+\hline
+{\em speed} & The speed the motor is traveling at in counts per second \\
+\hline
+{\em dx} & The difference in position between the previous encoder reading and the current encoder reading in counts \\
+\hline
+{\em dx} & The difference in time between the previous encoder reading and the current encoder reading in microseconds \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00032}{32}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db}\label{struct_encoder_a26d33b4213ad8eba621c27a7dffd27db} 
+\index{Encoder@{Encoder}!curr\_count@{curr\_count}}
+\index{curr\_count@{curr\_count}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{curr\_count}{curr\_count}}
+{\footnotesize\ttfamily uint32\+\_\+t curr\+\_\+count}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00036}{36}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588}\label{struct_encoder_a1df41bd38e38f416a1af4fd1531d3588} 
+\index{Encoder@{Encoder}!curr\_time@{curr\_time}}
+\index{curr\_time@{curr\_time}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{curr\_time}{curr\_time}}
+{\footnotesize\ttfamily uint32\+\_\+t curr\+\_\+time}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00038}{38}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8}\label{struct_encoder_a16e1c5d1dc52029430f8d1796ccd12c8} 
+\index{Encoder@{Encoder}!dt@{dt}}
+\index{dt@{dt}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{dt}{dt}}
+{\footnotesize\ttfamily int32\+\_\+t dt}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00042}{42}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}\label{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343} 
+\index{Encoder@{Encoder}!dx@{dx}}
+\index{dx@{dx}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{dx}{dx}}
+{\footnotesize\ttfamily int32\+\_\+t dx}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00041}{41}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_ad5570160009847b90e3bf8e14d303b0a}\label{struct_encoder_ad5570160009847b90e3bf8e14d303b0a} 
+\index{Encoder@{Encoder}!pos@{pos}}
+\index{pos@{pos}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{pos}{pos}}
+{\footnotesize\ttfamily int32\+\_\+t pos}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00039}{39}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e}\label{struct_encoder_a8d0f8ac76988bac337069cf96d6eb94e} 
+\index{Encoder@{Encoder}!prev\_count@{prev\_count}}
+\index{prev\_count@{prev\_count}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{prev\_count}{prev\_count}}
+{\footnotesize\ttfamily uint32\+\_\+t prev\+\_\+count}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00035}{35}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a7dff167b310b78ffe12f03656aebc01e}\label{struct_encoder_a7dff167b310b78ffe12f03656aebc01e} 
+\index{Encoder@{Encoder}!prev\_time@{prev\_time}}
+\index{prev\_time@{prev\_time}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{prev\_time}{prev\_time}}
+{\footnotesize\ttfamily uint32\+\_\+t prev\+\_\+time}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00037}{37}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a36dda2666e5436e608a494230ca9076b}\label{struct_encoder_a36dda2666e5436e608a494230ca9076b} 
+\index{Encoder@{Encoder}!speed@{speed}}
+\index{speed@{speed}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int32\+\_\+t speed}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00040}{40}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64}\label{struct_encoder_a30b15aedcc086ca7abb69f7ac012ce64} 
+\index{Encoder@{Encoder}!timer@{timer}}
+\index{timer@{timer}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{timer}{timer}}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def\texorpdfstring{$\ast$}{*} timer}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00033}{33}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+\Hypertarget{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a}\label{struct_encoder_a5594843206c8ec53a21cb0e7c9b5d18a} 
+\index{Encoder@{Encoder}!timing\_timer@{timing\_timer}}
+\index{timing\_timer@{timing\_timer}!Encoder@{Encoder}}
+\doxysubsubsection{\texorpdfstring{timing\_timer}{timing\_timer}}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def\texorpdfstring{$\ast$}{*} timing\+\_\+timer}
+
+
+
+Definition at line \mbox{\hyperlink{encoder__handler_8h_source_l00034}{34}} of file \mbox{\hyperlink{encoder__handler_8h_source}{encoder\+\_\+handler.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+doxy\+\_\+core/\+Inc/\mbox{\hyperlink{encoder__handler_8h}{encoder\+\_\+handler.\+h}}\end{DoxyCompactItemize}

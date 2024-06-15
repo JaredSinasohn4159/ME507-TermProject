@@ -1,0 +1,124 @@
+\doxysection{doxy\+\_\+core/\+Src/\+CLController.c File Reference}
+\hypertarget{_c_l_controller_8c}{}\label{_c_l_controller_8c}\index{doxy\_core/Src/CLController.c@{doxy\_core/Src/CLController.c}}
+
+
+this file implements the methods for the \doxylink{struct_c_l_controller}{CLController} class.  
+
+
+{\ttfamily \#include "{}CLController.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{_c_l_controller_8c_a52ab2a8ea3461a6c03a8ae4bdc418e2a}{run}} (\mbox{\hyperlink{struct_c_l_controller}{CLController}} \texorpdfstring{$\ast$}{*}con, int32\+\_\+t measured)
+\item 
+void \mbox{\hyperlink{_c_l_controller_8c_a778c8284b941b1f1135208e8d748600d}{reset\+\_\+controller}} (\mbox{\hyperlink{struct_c_l_controller}{CLController}} \texorpdfstring{$\ast$}{*}con)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+this file implements the methods for the \doxylink{struct_c_l_controller}{CLController} class. 
+
+\begin{DoxyDate}{Date}
+May 29, 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jared Sinasohn 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{_c_l_controller_8c_source}{CLController.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_c_l_controller_8c_a778c8284b941b1f1135208e8d748600d}\label{_c_l_controller_8c_a778c8284b941b1f1135208e8d748600d} 
+\index{CLController.c@{CLController.c}!reset\_controller@{reset\_controller}}
+\index{reset\_controller@{reset\_controller}!CLController.c@{CLController.c}}
+\doxysubsubsection{\texorpdfstring{reset\_controller()}{reset\_controller()}}
+{\footnotesize\ttfamily void reset\+\_\+controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_c_l_controller}{CLController}} \texorpdfstring{$\ast$}{*}}]{con }\end{DoxyParamCaption})}
+
+This function hard resets the controller (keeping controller gains the same)
+
+
+\begin{DoxyParams}{Parameters}
+{\em con} & The \doxylink{struct_c_l_controller}{CLController} instance to run the plant with \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8c_source_l00050}{50}} of file \mbox{\hyperlink{_c_l_controller_8c_source}{CLController.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00051\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}{err}}\ =\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797}{eff}}\ =\ 0;}
+\DoxyCodeLine{00053\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a}{err\_acc}}\ =\ 0;}
+\DoxyCodeLine{00054\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a605033f7cee9b2ab60378009befa6292}{slope}}\ =\ 0;}
+\DoxyCodeLine{00055\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_aa23d09031b44d4b742c938bba2bd3d08}{curr}}\ =\ 0;}
+\DoxyCodeLine{00056\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8f6fe8e7268551d335673047baf1bf56}{initial\_time}}\ =\ HAL\_GetTick();}
+\DoxyCodeLine{00057\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}}\ =\ HAL\_GetTick();}
+\DoxyCodeLine{00058\ \}}
+
+\end{DoxyCode}
+\Hypertarget{_c_l_controller_8c_a52ab2a8ea3461a6c03a8ae4bdc418e2a}\label{_c_l_controller_8c_a52ab2a8ea3461a6c03a8ae4bdc418e2a} 
+\index{CLController.c@{CLController.c}!run@{run}}
+\index{run@{run}!CLController.c@{CLController.c}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily uint32\+\_\+t run (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_c_l_controller}{CLController}} \texorpdfstring{$\ast$}{*}}]{con,  }\item[{int32\+\_\+t}]{measured }\end{DoxyParamCaption})}
+
+This function runs the Closed Loop Controller based on the parameters set up initially by the programmer
+
+
+\begin{DoxyParams}{Parameters}
+{\em con} & The \doxylink{struct_c_l_controller}{CLController} instance to run the plant with \\
+\hline
+{\em measured} & The value measured by the sensor to be fed back into the controller\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+eff The effort/output calculated by the Controller to send to the actuator 
+\end{DoxyReturn}
+\begin{DoxyAttention}{Attention}
+This function should be run at a rate slower than 1ms so as to not have zero time differential (if you are not using derivative control you can run at whatever speed you desire.) 
+\end{DoxyAttention}
+store the sensor value as the current value
+
+get the current time of simulation.
+
+calculate the error between the setpoint and the measured value
+
+add this error to the accumulated error, but only if integral control has been implemented.
+
+set the effort to be the proportional control plus integral control plus feed-\/forward control
+
+if derivative control is enabled, add the current error to the list of errors and increment the index
+
+if the list of errors is full, calculate the slope of the list and multiply it by the derivative constant and add it to the effort
+
+Definition at line \mbox{\hyperlink{_c_l_controller_8c_source_l00018}{18}} of file \mbox{\hyperlink{_c_l_controller_8c_source}{CLController.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00020\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_aa23d09031b44d4b742c938bba2bd3d08}{curr}}\ =\ measured;}
+\DoxyCodeLine{00022\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}}\ =\ HAL\_GetTick();}
+\DoxyCodeLine{00024\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}{err}}\ =\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a4cbcc732c16f2b337c79aacb6abcd996}{setpoint}}\ -\/\ con-\/>\mbox{\hyperlink{struct_c_l_controller_aa23d09031b44d4b742c938bba2bd3d08}{curr}};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordflow}{if}(con-\/>\mbox{\hyperlink{struct_c_l_controller_a8fc5451919c881c9f365a23f80a7066f}{ki}}\ >\ 0)\{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a}{err\_acc}}\ =\ con-\/>\mbox{\hyperlink{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a}{err\_acc}}\ +\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}{err}};}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797}{eff}}\ =\ (con-\/>\mbox{\hyperlink{struct_c_l_controller_af6f6dd2aceffa3ad6e8efbb61754a355}{kf}}\ *\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a4cbcc732c16f2b337c79aacb6abcd996}{setpoint}})/1000000\ +\ (con-\/>\mbox{\hyperlink{struct_c_l_controller_a2ea4cd350e19c81c4709080795260a78}{kp}}\ *\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}{err}})/1000000\ +\ (con-\/>\mbox{\hyperlink{struct_c_l_controller_a8fc5451919c881c9f365a23f80a7066f}{ki}}\ *\ con-\/>\mbox{\hyperlink{struct_c_l_controller_afbcda3b5dd10da7fad2b696d6e8ef13a}{err\_acc}})/1000000;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordflow}{if}(con-\/>\mbox{\hyperlink{struct_c_l_controller_a8d3d5860fec9eb2c248c19359d9f8fd6}{kd}}\ >\ 0)\{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_af1e57fe0d48cf1bebdd3fb6aef420924}{prev\_err\_list}}[con-\/>\mbox{\hyperlink{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}{prev\_err\_index}}]\ =\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a599b89a0d8623fbc885502f9423e33f6}{err}};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}{prev\_err\_index}}\ +=\ 1;}
+\DoxyCodeLine{00035\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordflow}{if}(con-\/>\mbox{\hyperlink{struct_c_l_controller_a8d3d5860fec9eb2c248c19359d9f8fd6}{kd}}\ >\ 0\ \&\&\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}{prev\_err\_index}}\ >=\ con-\/>\mbox{\hyperlink{struct_c_l_controller_abfd85f5e9e777f11ce6c0732f7dac9ff}{prev\_err\_list\_length}})\{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a605033f7cee9b2ab60378009befa6292}{slope}}\ =\ ((con-\/>\mbox{\hyperlink{struct_c_l_controller_af1e57fe0d48cf1bebdd3fb6aef420924}{prev\_err\_list}}[con-\/>\mbox{\hyperlink{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}{prev\_err\_index}}-\/1]-\/con-\/>\mbox{\hyperlink{struct_c_l_controller_af1e57fe0d48cf1bebdd3fb6aef420924}{prev\_err\_list}}[0]))*1000/(con-\/>\mbox{\hyperlink{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}}\ -\/\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8f6fe8e7268551d335673047baf1bf56}{initial\_time}});}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797}{eff}}\ +=\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8d3d5860fec9eb2c248c19359d9f8fd6}{kd}}\ *\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a605033f7cee9b2ab60378009befa6292}{slope}};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8166a0deeed50c7001cfa018a276338f}{prev\_err\_index}}\ =\ 0;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ con-\/>\mbox{\hyperlink{struct_c_l_controller_a8f6fe8e7268551d335673047baf1bf56}{initial\_time}}\ =\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a1df41bd38e38f416a1af4fd1531d3588}{curr\_time}};}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordflow}{return}\ con-\/>\mbox{\hyperlink{struct_c_l_controller_a4726d1cf116dac30e3e1ce17df384797}{eff}};}
+\DoxyCodeLine{00044\ \}}
+
+\end{DoxyCode}

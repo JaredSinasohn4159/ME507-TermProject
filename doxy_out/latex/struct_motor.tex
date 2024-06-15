@@ -1,0 +1,90 @@
+\doxysection{Motor Class Reference}
+\hypertarget{struct_motor}{}\label{struct_motor}\index{Motor@{Motor}}
+
+
+An implementation of a motor driver using a struct to emulate Object Oriented Programming. The motor has 4 parameters, timer which indicates the timer to be used to run the motor, channels, which indicates the channels to be used to run the motor, duty\+\_\+cycle, the duty cycle to run the motor at, and enable\+\_\+flag, which determines if the motor is allowed to run.  
+
+
+
+
+{\ttfamily \#include $<$motor\+\_\+driver.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+TIM\+\_\+\+Handle\+Type\+Def \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}{timer}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}{channels}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{struct_motor_ada18bd121f999df49f9985ab76ac0c9c}{duty\+\_\+cycle}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}{enable\+\_\+flag}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An implementation of a motor driver using a struct to emulate Object Oriented Programming. The motor has 4 parameters, timer which indicates the timer to be used to run the motor, channels, which indicates the channels to be used to run the motor, duty\+\_\+cycle, the duty cycle to run the motor at, and enable\+\_\+flag, which determines if the motor is allowed to run. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer} & The microcontroller timer to use to control the pwm in the motor. This is a timer pointer. \\
+\hline
+{\em channels} & The channels the PWM signal should run on. 1 corresponds to 1 and 2, and 2 corresponds to 3 and 4. \\
+\hline
+{\em duty\+\_\+cycle} & The duty cycle of the motor from -\/ARR to ARR, which is 1000 \\
+\hline
+{\em enable\+\_\+flag} & The flag which indicates whether or not the motor should be allowed to run. A zero means the motor is disabled and a one means the motor is enabled. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8h_source_l00029}{29}} of file \mbox{\hyperlink{motor__driver_8h_source}{motor\+\_\+driver.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d}\label{struct_motor_a0057a7f2eb00a01a4b11243fd5bf2f8d} 
+\index{Motor@{Motor}!channels@{channels}}
+\index{channels@{channels}!Motor@{Motor}}
+\doxysubsubsection{\texorpdfstring{channels}{channels}}
+{\footnotesize\ttfamily uint8\+\_\+t channels}
+
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8h_source_l00031}{31}} of file \mbox{\hyperlink{motor__driver_8h_source}{motor\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_motor_ada18bd121f999df49f9985ab76ac0c9c}\label{struct_motor_ada18bd121f999df49f9985ab76ac0c9c} 
+\index{Motor@{Motor}!duty\_cycle@{duty\_cycle}}
+\index{duty\_cycle@{duty\_cycle}!Motor@{Motor}}
+\doxysubsubsection{\texorpdfstring{duty\_cycle}{duty\_cycle}}
+{\footnotesize\ttfamily int32\+\_\+t duty\+\_\+cycle}
+
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8h_source_l00032}{32}} of file \mbox{\hyperlink{motor__driver_8h_source}{motor\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b}\label{struct_motor_a5e1d793fee56dddbdc6a6ebe8ccfcd3b} 
+\index{Motor@{Motor}!enable\_flag@{enable\_flag}}
+\index{enable\_flag@{enable\_flag}!Motor@{Motor}}
+\doxysubsubsection{\texorpdfstring{enable\_flag}{enable\_flag}}
+{\footnotesize\ttfamily uint8\+\_\+t enable\+\_\+flag}
+
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8h_source_l00033}{33}} of file \mbox{\hyperlink{motor__driver_8h_source}{motor\+\_\+driver.\+h}}.
+
+\Hypertarget{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64}\label{struct_motor_a30b15aedcc086ca7abb69f7ac012ce64} 
+\index{Motor@{Motor}!timer@{timer}}
+\index{timer@{timer}!Motor@{Motor}}
+\doxysubsubsection{\texorpdfstring{timer}{timer}}
+{\footnotesize\ttfamily TIM\+\_\+\+Handle\+Type\+Def\texorpdfstring{$\ast$}{*} timer}
+
+
+
+Definition at line \mbox{\hyperlink{motor__driver_8h_source_l00030}{30}} of file \mbox{\hyperlink{motor__driver_8h_source}{motor\+\_\+driver.\+h}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+doxy\+\_\+core/\+Inc/\mbox{\hyperlink{motor__driver_8h}{motor\+\_\+driver.\+h}}\end{DoxyCompactItemize}

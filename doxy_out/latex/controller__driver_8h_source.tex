@@ -1,0 +1,30 @@
+\doxysection{controller\+\_\+driver.\+h}
+\hypertarget{controller__driver_8h_source}{}\label{controller__driver_8h_source}\index{doxy\_core/Inc/controller\_driver.h@{doxy\_core/Inc/controller\_driver.h}}
+\mbox{\hyperlink{controller__driver_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ SRC\_CONTROLLER\_DRIVER\_H\_}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ SRC\_CONTROLLER\_DRIVER\_H\_}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}stm32l4xx\_hal.h"{}}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00033}\mbox{\hyperlink{struct_r_c___controller}{00033}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00034}\mbox{\hyperlink{struct_r_c___controller_a30b15aedcc086ca7abb69f7ac012ce64}{00034}}\ \ \ \ \ TIM\_HandleTypeDef*\ \mbox{\hyperlink{struct_r_c___controller_a30b15aedcc086ca7abb69f7ac012ce64}{timer}};\ \textcolor{comment}{//\ Handle\ to\ the\ HAL\ timer\ object}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00035}\mbox{\hyperlink{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071}{00035}}\ \ \ \ \ uint32\_t\ \ \mbox{\hyperlink{struct_r_c___controller_abe751b3d399e053031c1e3db20b6b071}{period1}};\ \textcolor{comment}{//\ pulse\ width\ of\ the\ first\ axis}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00036}\mbox{\hyperlink{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc}{00036}}\ \ \ \ \ uint32\_t\ \ \mbox{\hyperlink{struct_r_c___controller_adf8633b43922fbf4f1d86981daf74ccc}{period2}};\ \textcolor{comment}{//\ pulse\ width\ of\ the\ second\ axis}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00037}\mbox{\hyperlink{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc}{00037}}\ \ \ \ \ uint32\_t\ \ \mbox{\hyperlink{struct_r_c___controller_a479c1478dcd541a519900f772ed00afc}{re1}};\ \textcolor{comment}{//\ Timer\ value\ on\ the\ rising\ edge\ captured\ on\ the\ first\ axis}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00038}\mbox{\hyperlink{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e}{00038}}\ \ \ \ \ uint32\_t\ \ \mbox{\hyperlink{struct_r_c___controller_ad0eced06e50c7aa127ed5a80d3848d9e}{re2}};\ \textcolor{comment}{//\ Timer\ value\ on\ the\ rising\ edge\ captured\ on\ the\ second\ axis}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00039}\mbox{\hyperlink{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9}{00039}}\ \ \ \ \ uint32\_t\ \ \mbox{\hyperlink{struct_r_c___controller_ae5de7a7871f941a077adfb7b66a2bfa9}{fe1}};\ \textcolor{comment}{//\ Timer\ value\ on\ the\ falling\ edge\ captured\ on\ the\ first\ axis}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00040}\mbox{\hyperlink{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767}{00040}}\ \ \ \ \ uint32\_t\ \ \mbox{\hyperlink{struct_r_c___controller_a8fce6d4aec14214c369eabf266735767}{fe2}};\ \textcolor{comment}{//\ Timer\ value\ on\ the\ falling\ edge\ captured\ on\ the\ second\ axis}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00041}\mbox{\hyperlink{struct_r_c___controller_a1beedcb79cbaf43ce4cd67b1cb65254b}{00041}}\ \ \ \ \ uint8\_t\ \ \mbox{\hyperlink{struct_r_c___controller_a1beedcb79cbaf43ce4cd67b1cb65254b}{fe\_flag1}};\ \textcolor{comment}{//\ flag\ that\ is\ set\ by\ the\ input\ capture\ callback\ function\ to\ indicate\ a\ falling\ edge\ has\ been\ detected\ for\ the\ first\ axis.}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00042}\mbox{\hyperlink{struct_r_c___controller_a79c94209d2c33be26296441191b97d0f}{00042}}\ \ \ \ \ uint8\_t\ \ \mbox{\hyperlink{struct_r_c___controller_a79c94209d2c33be26296441191b97d0f}{fe\_flag2}};\ \textcolor{comment}{//\ flag\ that\ is\ set\ by\ the\ input\ capture\ callback\ function\ to\ indicate\ a\ falling\ edge\ has\ been\ detected\ for\ the\ first\ axis.}}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00043}00043\ \}\ \mbox{\hyperlink{struct_r_c___controller}{RC\_Controller}};}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00050}00050\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{controller__driver_8h_ad113cc6d4c1a8f8c7c761d0c4dc1c272}{controller\_driver\_calc\_per1}}(\mbox{\hyperlink{struct_r_c___controller}{RC\_Controller}}*\ controller);}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00057}00057\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{controller__driver_8h_a7a3aa513c19747873ac798918a29b2ef}{controller\_driver\_calc\_per2}}(\mbox{\hyperlink{struct_r_c___controller}{RC\_Controller}}*\ controller);}
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{controller__driver_8h_source_l00059}00059\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ SRC\_CONTROLLER\_DRIVER\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

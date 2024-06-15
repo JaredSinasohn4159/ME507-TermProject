@@ -1,0 +1,25 @@
+\doxysection{pitch\+\_\+encoder\+\_\+handler.\+c}
+\hypertarget{pitch__encoder__handler_8c_source}{}\label{pitch__encoder__handler_8c_source}\index{doxy\_core/Src/pitch\_encoder\_handler.c@{doxy\_core/Src/pitch\_encoder\_handler.c}}
+\mbox{\hyperlink{pitch__encoder__handler_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{pitch__encoder__handler_8h}{pitch\_encoder\_handler.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00015}\mbox{\hyperlink{pitch__encoder__handler_8h_ae30c094e6767f017185358c645160595}{00015}}\ uint32\_t\ \mbox{\hyperlink{pitch__encoder__handler_8c_ae30c094e6767f017185358c645160595}{get\_pitch}}(\mbox{\hyperlink{struct_pitch_encoder}{PitchEncoder}}*\ p\_enc)\{}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{encoder__handler_8h_a2e99e34a584541bdb75991748fcfe787}{encoder\_read\_curr\_state}}((p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a4f4f9d7dc6695bed4a97c8cc643d26d3}{encoder}}));}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00019}00019\ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a70d4fc7788f641b6913d1a8280206a9b}{delta}}\ =\ (int16\_t)(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a4f4f9d7dc6695bed4a97c8cc643d26d3}{encoder}}-\/>\mbox{\hyperlink{struct_encoder_a83d2ce12a8b1a8aa50234aa08fe69343}{dx}});}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00021}00021\ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ +=\ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a70d4fc7788f641b6913d1a8280206a9b}{delta}};}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00023}00023\ \ \ \ \ \textcolor{keywordflow}{if}(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a70d4fc7788f641b6913d1a8280206a9b}{delta}}\ ==\ 0)\{}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00024}00024\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}};}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00025}00025\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00027}00027\ \ \ \ \ \textcolor{keywordflow}{if}(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ <\ 0)\{}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00028}00028\ \ \ \ \ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ +=\ 12;}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00029}00029\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00030}00030\ \ \ \ \ \textcolor{keywordflow}{if}(p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ >=\ 12)\{}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00031}00031\ \ \ \ \ \ \ \ \ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}}\ -\/=\ 12;}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00032}00032\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{return}\ p\_enc-\/>\mbox{\hyperlink{struct_pitch_encoder_a967f06d969d74c7588755b6bc82575c5}{pitch}};}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00034}00034\ \}}
+\DoxyCodeLine{\Hypertarget{pitch__encoder__handler_8c_source_l00035}00035\ }
+
+\end{DoxyCode}

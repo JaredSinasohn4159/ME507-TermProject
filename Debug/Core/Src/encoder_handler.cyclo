@@ -1,4 +1,4 @@
-../Core/Src/encoder_handler.c:9:6:encoder_read_curr_state	1
-../Core/Src/encoder_handler.c:20:9:encoder_calc_speed	2
-../Core/Src/encoder_handler.c:26:6:zero	1
-../Core/Src/encoder_handler.c:36:9:delta	3
+../Core/Src/encoder_handler.c:15:6:encoder_read_curr_state	1
+../Core/Src/encoder_handler.c:39:9:encoder_calc_speed	2
+../Core/Src/encoder_handler.c:52:6:zero	1
+../Core/Src/encoder_handler.c:71:9:delta	3
