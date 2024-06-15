@@ -2,6 +2,8 @@
 
 Project Members: Jojo Penrose, Jared Sinasohn
 
+Github: https://github.com/JaredSinasohn4159/ME507-TermProject
+
 Welcome to the ME 507 Strobe Tuner Documentation!
 
 This website provides an overview of the software side of our ME 507 Strobe Tuner project, including its features, setup, and usage instructions.
